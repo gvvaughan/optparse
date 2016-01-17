@@ -17,8 +17,6 @@ dir		= "."
 
 file		= "../optparse.lua"
 
-examples	= "../examples"
-
 new_type ("object", "Objects", false, "Fields")
 
 format		= "markdown"

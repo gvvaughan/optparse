@@ -32,8 +32,9 @@ local string_len	= string.len
 local table_insert	= table.insert
 
 
--- Use strict if we have it.
-local ok, strict = pcall (require, "std.strict")
+-- Use strict if we have a new enough implementation.
+-- (Note released std.strict is not namespace specific)
+local ok, strict = pcall (require, "strict")
 if not ok then
   local env = _ENV
   strict = function () return env end

@@ -7,12 +7,12 @@ description = {
     Automatically generate a custom command-line option parser from
     just the long-form help text for your program.
   ]],
-  homepage = "http://lua-stdlib.github.io/lua-stdlib",
+  homepage = "http://gvvaughan.github.io/optparse",
   license = "MIT/X11",
 }
 
 source = {
-  url = "git://github.com/gvvaughan/gvvaughan.git",
+  url = "git://github.com/gvvaughan/optparse.git",
 }
 
 dependencies = {
