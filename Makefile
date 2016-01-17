@@ -12,7 +12,7 @@ doc: doc/config.ld optparse.lua
 	$(LDOC) -c doc/config.ld .
 
 doc/config.ld: doc/config.ld.in
-	version=`$(LUA) -e 'io.stdout:write(require"optparse"._VERSION)'`; \
+	version=`LUA_PATH=$$(pwd)'/?.lua;;' $(LUA) -e 'io.stdout:write(require"optparse"._VERSION)'`; \
 	$(SED) -e "s,@PACKAGE_VERSION@,$$version," '$<' > '$@'
 
 
