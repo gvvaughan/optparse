@@ -1,0 +1,28 @@
+-- -*- lua -*-
+title		= "optparse @PACKAGE_VERSION@ Reference"
+project		= "optparse @PACKAGE_VERSION@"
+description	= [[
+# Command Line Option Parsing
+
+This is a light-weight library for Lua 5.1 (including LuaJIT), 5.2
+and 5.3 written in pure Lua.
+
+## LICENSE
+
+The code is copyright by its author, and released under the MIT
+license (the same license as Lua itself).  There is no warranty.
+]]
+
+dir		= "."
+
+file		= "../optparse.lua"
+
+examples	= "../examples"
+
+new_type ("object", "Objects", false, "Fields")
+
+format		= "markdown"
+
+sort		= false
+
+backtick_references = false
