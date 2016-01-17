@@ -22,6 +22,6 @@ dependencies = {
 build = {
   type = "builtin",
   modules = {
-    "optparse" = "optparse.lua",
+    optparse = "optparse.lua",
   },
 }
