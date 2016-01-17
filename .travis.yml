@@ -137,7 +137,7 @@ install:
 
 script:
   # Verify local build.
-  - make check
+  - make check LUA=$LUA
 
 
 notifications:
