@@ -588,7 +588,7 @@ local function set_handler (current, new)
 end
 
 
-local function _init (_, spec)
+local function _init (self, spec)
   local parser = {}
 
   parser.versiontext, parser.version, parser.helptext, parser.program =
@@ -659,7 +659,7 @@ local function _init (_, spec)
     on (parser, options, handler or flag)
   end
 
-  return parser
+  return setmetatable (parser, getmetatable (self))
 end
 
 
@@ -783,5 +783,5 @@ return Module ({
     },
   }),
 
-  _VERSION = "1.0",
+  _VERSION = "1.0.1",
 })

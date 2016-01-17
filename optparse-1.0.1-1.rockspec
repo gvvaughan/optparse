@@ -1,5 +1,5 @@
 package = "optparse"
-version = "1.0-1"
+version = "1.0.1-1"
 
 description = {
   summary = "Parse and process command-line options",
