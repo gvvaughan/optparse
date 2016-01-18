@@ -50,7 +50,7 @@ The best way to install without [LuaRocks][] is to copy the
 Use
 ---
 
-The optparse package returns a parser factory when required:
+The optparse package returns a parser factory when loaded:
 
 ```lua
     local OptionParser = require "optparse"
@@ -90,17 +90,16 @@ The optparse package returns a parser factory when required:
     local arg, opts = parser:parse (_G.arg)
 ```
 
-Modules not in the standard set may be removed from future versions of
-optparse.
 
 
 Documentation
 -------------
 
-The latest release of these libraries is [documented in LDoc][github.io].
-Pre-built HTML files are included in the release.
+The latest release is [documented with LDoc][github.io].
+Pre-built HTML files are included in the [release tarball][].
 
 [github.io]: http://gvvaughan.github.io/optparse
+[release]: http://gvvaughan.github.io/optparse/releases
 
 
 Bug reports and code contributions
