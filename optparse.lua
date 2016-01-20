@@ -14,6 +14,7 @@
 ]=]
 
 
+local _ENV		= _ENV
 local assert		= assert
 local error		= error
 local getmetatable	= getmetatable
@@ -32,15 +33,15 @@ local string_len	= string.len
 local table_insert	= table.insert
 
 
--- Use strict if we have a new enough implementation.
--- (Note released std.strict is not namespace specific)
-local ok, strict = pcall (require, "strict")
-if not ok then
-  local env = _ENV
-  strict = function () return env end
-end
-local _ENV = strict {}
+local ok, debug_init	= pcall (require, "std.debug_init")
+local _DEBUG		= ok and debug_init._DEBUG or { strict = true }
 
+if not ok or (debug_init._DEBUG or {}).strict then
+  local ok, strict	= pcall (require, "strict")
+  if ok then
+    _ENV = strict {}
+  end
+end
 
 
 --[[ ================= ]]--
