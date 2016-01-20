@@ -784,5 +784,10 @@ return Module ({
     },
   }),
 
+  --- Constants.
+  -- @section constants
+
+  --- The release version of optparse.
+  -- @string _VERSION
   _VERSION = "1.0.1",
 })

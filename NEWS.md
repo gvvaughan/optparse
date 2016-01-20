@@ -8,6 +8,10 @@
    `_DEBUG.strict` set to `false`, then don't try to load the standalone
    `strict` module.
 
+### Bug fixes
+
+ - `optparse._VERSION` is now documented properly.
+
 
 ## Noteworthy changes in release 1.0.1 (2016-01-17) [stable]
 
