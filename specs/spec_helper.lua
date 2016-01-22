@@ -12,6 +12,10 @@ package.path = std.package.normalize ("./?.lua", package.path)
 local LUA = os.getenv "LUA" or "lua"
 
 
+-- Allow use of bare 'unpack' even in Lua 5.3.
+unpack = table.unpack or unpack
+
+
 -- Simplified version for specifications, does not support functable
 -- valued __len metamethod, so don't write examples that need that!
 function len (x)
