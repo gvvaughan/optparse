@@ -10,6 +10,8 @@
 
 ### Bug fixes
 
+ - Uninstalled `std.debug_init` is handled correctly.
+
  - `optparse._VERSION` is now documented properly.
 
 

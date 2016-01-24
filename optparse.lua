@@ -1,4 +1,4 @@
---[=[--
+--[[--
  Parse and process command line options.
 
  In the common case, you can write the long-form help output typical of
@@ -11,7 +11,7 @@
  like.
 
  @module optparse
-]=]
+]]
 
 
 local _ENV		= _ENV
@@ -33,15 +33,53 @@ local string_len	= string.len
 local table_insert	= table.insert
 
 
-local ok, debug_init	= pcall (require, "std.debug_init")
-local _DEBUG		= ok and debug_init._DEBUG or { strict = true }
 
-if not ok or (debug_init._DEBUG or {}).strict then
-  local ok, strict	= pcall (require, "strict")
+--[[ ================== ]]--
+--[[ Initialize _DEBUG. ]]--
+--[[ ================== ]]--
+
+
+local _DEBUG		= _DEBUG
+do
+  -- Make sure none of these symbols leak out into the rest of the
+  -- module, in case we can enable 'strict' mode at the end of the block.
+
+  local ok, debug_init	= pcall (require, "std.debug_init")
   if ok then
-    _ENV = strict {}
+    _DEBUG		= debug_init._DEBUG
+  else
+    local function choose (t)
+      for k, v in pairs (t) do
+        if _DEBUG == false then
+          t[k] = v.fast
+	elseif _DEBUG == nil then
+          t[k] = v.default
+        elseif type (_DEBUG) ~= "table" then
+          t[k] = v.safe
+        elseif _DEBUG[k] ~= nil then
+          t[k] = _DEBUG[k]
+        else
+          t[k] = v.default
+        end
+      end
+      return t
+    end
+
+    _DEBUG = choose {
+      strict    = {default = true,  safe = true,  fast = false},
+    }
+  end
+
+  -- Unless strict was disabled (`_DEBUG = false`), or that module is not
+  -- available, check for use of undeclared variables in this module.
+  if _DEBUG.strict then
+    local ok, strict	= pcall (require, "strict")
+    if ok then
+      _ENV = strict {}
+    end
   end
 end
+
 
 
 --[[ ================= ]]--
