@@ -827,5 +827,5 @@ return Module ({
 
   --- The release version of optparse.
   -- @string _VERSION
-  _VERSION = "1.0.1",
+  _VERSION = "1.1",
 })

@@ -7,6 +7,8 @@ addons:
 
 env:
   global:
+    - _VERSION=1.1
+
     - LUAJIT_DIR=luajit-2.0
     - LUAJIT_VER=2.0.4
     - LUA53_VER=5.3.2
@@ -124,8 +126,8 @@ install:
   # Build from rockspec, forcing uninstall of older luarocks installed
   # above when testing the git rockspec, both for enforcing backwards
   # compatibility by default, and for ease of maintenance.
-  - if test -f 'optparse-1.0.1-1.rockspec'; then
-      sudo luarocks make 'optparse-1.0.1-1.rockspec' LUA="$LUA";
+  - if test -f "optparse-$_VERSION-1.rockspec"; then
+      sudo luarocks make "optparse-$_VERSION-1.rockspec" LUA="$LUA";
     else
       sudo luarocks make --force 'optparse-git-1.rockspec' LUA="$LUA";
     fi
