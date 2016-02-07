@@ -1,9 +1,15 @@
 before:
+  this_module = "optparse"
+
   hell = require "specl.shell"
+
+  M = require (this_module)
 
 specify std.optparse:
 - before: |
-    OptionParser = require "optparse"
+    M.version = nil             -- previous specs may have autoloaded it
+
+    OptionParser = M
 
     help = [[
     parseme (optparse spec) 0α1
@@ -44,6 +50,18 @@ specify std.optparse:
     - it does not touch the global table:
         expect (show_apis {added_to="_G", by="std.optparse"}).
           to_equal {}
+
+- context when lazy loading:
+  - it has no submodules on initial load:
+      for _, v in pairs (M) do
+        if (getmetatable (v) or {})._type ~= "OptionParser" then
+          expect (type (v)).not_to_be "table"
+        end
+      end
+  - it loads submodules on demand:
+      lazy = M.version
+      expect (lazy).to_be (require "optparse.version")
+
 
 - describe OptionParser:
   - it recognises the program name:
@@ -459,3 +477,14 @@ specify std.optparse:
     - it stops separating at an optional argument option:
         expect (parseargs ([[{"x", "this"}, parser.optional]], {"-bxbit"})).
           to_output "opts = { b = true, this = bit }\n"
+
+
+- describe version:
+  - it returns a string:
+      expect (type (M.version)).to_be "string"
+  - it contains package description:
+      expect (string.match (M.version, "^(.*)/")).
+        to_be "Parse Command-Line Options "
+  - it ends with a semantic version number:
+      expect (string.match (M.version, "([%.%d]+)%D*$")).
+        not_to_be (nil)

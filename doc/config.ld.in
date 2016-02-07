@@ -15,7 +15,7 @@ license (the same license as Lua itself).  There is no warranty.
 
 dir		= "."
 
-file		= "../optparse.lua"
+file		= "../lib/optparse/init.lua"
 
 new_type ("object", "Objects", false, "Fields")
 

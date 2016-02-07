@@ -716,15 +716,7 @@ end
 -- customparser = optparse (optparse_spec)
 
 
-local function Module (t)
-  return setmetatable (t, {
-    _type = "Module",
-    __call = function (self, ...) return self.prototype (...) end,
-  })
-end
-
-
-return Module ({
+return setmetatable ({
   --- OptionParser prototype object.
   --
   -- Most often, after instantiating an @{OptionParser}, everything else
@@ -821,11 +813,32 @@ return Module ({
       parse  = parse,
     },
   }),
+}, {
+  --- Metamethods
+  -- @section Metamethods
 
-  --- Constants.
-  -- @section constants
+  _type = "Module",
 
-  --- The release version of optparse.
-  -- @string _VERSION
-  _VERSION = "1.1",
+
+  -- Pass through options to the OptionParser prototype.
+  __call = function (self, ...) return self.prototype (...) end,
+  
+
+  --- Lazy loading of optparse submodules.
+  -- Don't load everything on initial startup, wait until first attempt
+  -- to access a submodule, and then load it on demand.
+  -- @function __index
+  -- @string name submodule name
+  -- @treturn table|nil the submodule that was loaded to satisfy the missing
+  --   `name`, otherwise `nil` if nothing was found
+  -- @usage
+  -- local optparse = require "optparse"
+  -- local version = optparse.version
+  __index = function (self, name)
+    local ok, t = pcall (require, "optparse." .. name)
+    if ok then
+      rawset (self, name, t)
+      return t
+    end
+  end,
 })
