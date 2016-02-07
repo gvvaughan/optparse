@@ -1,5 +1,5 @@
 package = "optparse"
-version = "git-1"
+version = "1.1.1-1"
 
 description = {
   summary = "Parse and process command-line options",
@@ -12,7 +12,8 @@ description = {
 }
 
 source = {
-  url = "git://github.com/gvvaughan/optparse.git",
+  url = "http://github.com/gvvaughan/optparse/archive/v1.1.1.zip",
+  dir = "optparse-1.1.1",
 }
 
 dependencies = {

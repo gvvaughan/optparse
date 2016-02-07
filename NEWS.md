@@ -1,5 +1,16 @@
 # optparse NEWS - User visible changes
 
+## Noteworthy changes in release 1.1.1 (2016-02-07) [stable]
+
+### Bug fixes
+
+  - Update for change in std.strict module path.
+
+### Incompatible changes
+
+  - `optparse._VERSION` is now `optparse.version` for consistency with
+    other former stdlib modules.
+
 ## Noteworthy changes in release 1.1 (2016-01-29) [stable]
 
 ### New features
