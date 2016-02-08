@@ -719,6 +719,11 @@ end
 
 
 return setmetatable ({
+  --- Module table.
+  -- @table optparse
+  -- @string version release version identifier
+
+
   --- OptionParser prototype object.
   --
   -- Most often, after instantiating an @{OptionParser}, everything else
