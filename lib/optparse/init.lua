@@ -643,7 +643,7 @@ local function _init (self, spec)
   -- Collect helptext lines that begin with two or more spaces followed
   -- by a '-'.
   local specs = {}
-  parser.helptext:gsub ("\n  %s*(%-[^\n]+)",
+  parser.helptext:gsub ("\n  %s*(%-[^\n]+\n?)",
                         function (spec) table_insert (specs, spec) end)
 
   -- Register option handlers according to the help text.
