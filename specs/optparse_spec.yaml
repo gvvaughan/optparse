@@ -5,7 +5,7 @@ before:
 
   M = require (this_module)
 
-specify std.optparse:
+specify optparse:
 - before: |
     M.version = nil             -- previous specs may have autoloaded it
 
@@ -39,7 +39,7 @@ specify std.optparse:
 
     Footer text.
 
-    Please report bugs at <http://github.com/lua-stdlib/lua-stdlib/issues>.
+    Please report bugs at <http://github.com/gvvaughan/optparse/issues>.
     ]]
 
     -- strip off the leading whitespace required for YAML
@@ -48,7 +48,7 @@ specify std.optparse:
 - context when required:
   - context by name:
     - it does not touch the global table:
-        expect (show_apis {added_to="_G", by="std.optparse"}).
+        expect (show_apis {added_to="_G", by="optparse"}).
           to_equal {}
 
 - context when lazy loading:
@@ -82,7 +82,7 @@ specify std.optparse:
   - before: |
       code = [[
         package.path = "]] .. package.path .. [["
-        local OptionParser = require 'std.optparse'
+        local OptionParser = require 'optparse'
         local help = [=[]] .. help .. [[]=]
         help = help:match ("^[%s\n]*(.-)[%s\n]*$")
 
@@ -211,7 +211,7 @@ specify std.optparse:
   - context with option defaults:
     - before: |
         function main (arg)
-          local OptionParser = require "std.optparse"
+          local OptionParser = require "optparse"
           local parser = OptionParser ("program 0\nUsage: program\n" ..
                            "  -x  set x\n" ..
                            "  -y  set y\n" ..
@@ -239,7 +239,7 @@ specify std.optparse:
     - before: |
         runscript = function (code)
           return luaproc ([[
-            local OptionParser = require "std.optparse"
+            local OptionParser = require "optparse"
             local parser = OptionParser ("program 0\nUsage: program\n")
             _G.arg, _G.opts = parser:parse (_G.arg)
             ]] .. code .. [[
@@ -268,7 +268,7 @@ specify std.optparse:
     - before: |
         runscript = function (code)
           return luaproc ([[
-            local OptionParser = require "std.optparse"
+            local OptionParser = require "optparse"
             local parser = OptionParser ("program 0\nUsage: program\n")
             _G.arg, _G.opts = parser:parse (_G.arg)
             ]] .. code .. [[
@@ -298,7 +298,7 @@ specify std.optparse:
       function parseargs (onargstr, arglist)
         code = [[
           package.path = "]] .. package.path .. [["
-          local OptionParser = require 'std.optparse'
+          local OptionParser = require 'optparse'
           local help = [=[]] .. help .. [[]=]
           help = help:match ("^[%s\n]*(.-)[%s\n]*$")
 
