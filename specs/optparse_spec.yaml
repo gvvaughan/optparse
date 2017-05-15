@@ -14,7 +14,7 @@ specify optparse:
     help = [[
     parseme (optparse spec) 0α1
 
-    Copyright © 2016 Gary V. Vaughan
+    Copyright © 2017 Gary V. Vaughan
     This test program comes with ABSOLUTELY NO WARRANTY.
 
     Usage: parseme [<options>] <file>...
