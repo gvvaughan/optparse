@@ -31,6 +31,7 @@ specify optparse:
           --long               a long option with no short option
           --another-long       a long option with internal hypen
           --true               a Lua keyword as an option name
+          --boolean            an optparse handler as an option name
       -v, --verbose            a combined short and long option
       -n, --dryrun, --dry-run  several spellings of the same option
       -u, --name=USER          require an argument
@@ -102,6 +103,13 @@ specify optparse:
         end
       ]]
       parse = bind (luaproc, {code})
+
+  - it collects non-option arguments:
+      expect (parse {"foo"}).to_output "args = { foo }\n"
+  - it collects non-options arguments matching argparse handler names:
+      expect (parse {"file"}).to_output "args = { file }\n"
+  - it collects arguments matching argparse handler names:
+      expect (parse {"--boolean"}).to_output "opts = { boolean = true }\n"
 
   - it responds to --version with version text:
       expect (parse {"--version"}).

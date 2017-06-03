@@ -1,5 +1,13 @@
 # optparse NEWS - User visible changes
 
+## Noteworthy changes in release ?.?.? (????-??-??) [?]
+
+### Bug fixes
+
+  - don't crash when first unrecognized argument is also a handler
+    name (boolean, file, finished, flag, etc...)
+
+
 ## Noteworthy changes in release 1.1.1 (2016-02-07) [stable]
 
 ### Bug fixes

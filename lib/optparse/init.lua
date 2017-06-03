@@ -590,7 +590,7 @@ local function parse (self, arglist, defaults)
   while i > 0 and i <= len (arglist) do
     local opt = arglist[i]
 
-    if self[opt] == nil then
+    if self[opt] == nil or opt:match "^[^%-]" then
       table_insert (self.unrecognised, opt)
       i = i + 1
 
