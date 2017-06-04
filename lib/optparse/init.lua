@@ -648,7 +648,8 @@ local function _init (self, spec)
 
   -- Register option handlers according to the help text.
   for _, spec in ipairs (specs) do
-    local options, handler = {}
+    -- append a trailing space separator to match %s in patterns below
+    local options, spec, handler = {}, spec .. ' '
 
     -- Loop around each '-' prefixed option on this line.
     while spec:sub (1, 1) == "-" do
@@ -776,6 +777,8 @@ return setmetatable ({
   --   -b                       a short option with no long option
   --       --long               a long option with no short option
   --       --another-long       a long option with internal hypen
+  --       --really-long-option-name
+  --                            with description on following line
   --   -v, --verbose            a combined short and long option
   --   -n, --dryrun, --dry-run  several spellings of the same option
   --   -u, --name=USER          require an argument

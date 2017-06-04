@@ -32,6 +32,8 @@ specify optparse:
           --another-long       a long option with internal hypen
           --true               a Lua keyword as an option name
           --boolean            an optparse handler as an option name
+          --really-long-option-name
+                               with description on following line
       -v, --verbose            a combined short and long option
       -n, --dryrun, --dry-run  several spellings of the same option
       -u, --name=USER          require an argument
