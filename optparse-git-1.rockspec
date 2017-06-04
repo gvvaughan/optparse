@@ -1,4 +1,4 @@
-local _MODREV, _SPECREV = '1.2', '-1'
+local _MODREV, _SPECREV = 'git', '-1'
 
 package = 'optparse'
 version = _MODREV .. _SPECREV
@@ -14,8 +14,7 @@ description = {
 }
 
 source = {
-  url = 'http://github.com/gvvaughan/optparse/archive/v' .. _MODREV .. '.zip',
-  dir = 'optparse-' .. _MODREV,
+  url = 'git://github.com/gvvaughan/optparse.git',
 }
 
 dependencies = {
