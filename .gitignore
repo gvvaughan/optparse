@@ -1,4 +1,3 @@
 .DS_Store
-/doc/*
-!/doc/config.ld.in
+/doc/config.ld*
 /optparse-*.src.rock

@@ -4,7 +4,7 @@ MKDIR	= mkdir -p
 SED	= sed
 SPECL	= specl
 
-VERSION	= 1.1.1
+VERSION	= 1.2
 
 luadir	= lib/optparse
 SOURCES =				\
