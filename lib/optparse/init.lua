@@ -52,7 +52,7 @@ do
       for k, v in pairs (t) do
         if _DEBUG == false then
           t[k] = v.fast
-	elseif _DEBUG == nil then
+        elseif _DEBUG == nil then
           t[k] = v.default
         elseif type (_DEBUG) ~= "table" then
           t[k] = v.safe
@@ -137,17 +137,17 @@ local function normalise (self, arglist)
       if x then
         local optname = opt:sub (1, x -1)
 
-	-- Only split recognised long options.
-	if self[optname] then
+        -- Only split recognised long options.
+        if self[optname] then
           table_insert (normal, optname)
           table_insert (normal, opt:sub (x + 1))
-	else
-	  x = nil
-	end
+        else
+          x = nil
+        end
       end
 
       if x == nil then
-	-- No '=', or substring before '=' is not a known option name.
+        -- No '=', or substring before '=' is not a known option name.
         table_insert (normal, opt)
       end
 
@@ -158,19 +158,19 @@ local function normalise (self, arglist)
 
         split[#split + 1] = opt
 
-	-- If there's no handler, the option was a typo, or not supposed
-	-- to be an option at all.
-	if self[opt] == nil then
-	  opt, split = nil, { orig }
+        -- If there's no handler, the option was a typo, or not supposed
+        -- to be an option at all.
+        if self[opt] == nil then
+          opt, split = nil, { orig }
 
         -- Split '-xyz' into '-x -yz', and reiterate for '-yz'
         elseif self[opt].handler ~= optional and
           self[opt].handler ~= required then
-	  if string_len (rest) > 0 then
+          if string_len (rest) > 0 then
             opt = "-" .. rest
-	  else
-	    opt = nil
-	  end
+          else
+            opt = nil
+          end
 
         -- Split '-xshortargument' into '-x shortargument'.
         else
@@ -534,11 +534,13 @@ local function on (self, opts, handler, value)
                   end)
   end
 
-  -- strip leading '-', and convert non-alphanums to '_'
-  local key = last (normal):match ("^%-*(.*)$"):gsub ("%W", "_")
+  if next(normal) then
+    -- strip leading '-', and convert non-alphanums to '_'
+    local key = last (normal):match ("^%-*(.*)$"):gsub ("%W", "_")
 
-  for _, opt in ipairs (normal) do
-    self[opt] = { key = key, handler = handler, value = value }
+    for _, opt in ipairs (normal) do
+      self[opt] = { key = key, handler = handler, value = value }
+    end
   end
 end
 
@@ -652,7 +654,7 @@ local function _init (self, spec)
     local options, spec, handler = {}, spec .. ' '
 
     -- Loop around each '-' prefixed option on this line.
-    while spec:sub (1, 1) == "-" do
+    while spec:match "%-[%-%w]" do
 
       -- Capture end of options processing marker.
       if spec:match "^%-%-,?%s" then
@@ -832,7 +834,7 @@ return setmetatable ({
 
   -- Pass through options to the OptionParser prototype.
   __call = function (self, ...) return self.prototype (...) end,
-  
+
 
   --- Lazy loading of optparse submodules.
   -- Don't load everything on initial startup, wait until first attempt

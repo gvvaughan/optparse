@@ -80,6 +80,15 @@ specify optparse:
                       "Footer .*/issues>%.")
   - it diagnoses incorrect input text:
       expect (OptionParser "garbage in").to_error "argument must match"
+  - it ignores bare leading hyphens: |
+      expect (OptionParser (
+        "barehypen 1.0\n" ..
+        "\n" ..
+        "Usage: barehyphen\n" ..
+        "\n" ..
+        "    -a a\n" ..
+        "    - b\n")).not_to_error "with anything"
+
 
 - describe parser:
   - before: |
