@@ -44,7 +44,7 @@ do
    -- Make sure none of these symbols leak out into the rest of the
    -- module, in case we can enable 'strict' mode at the end of the block.
 
-   local ok, debug_init	= pcall (require, "std.debug_init")
+   local ok, debug_init	= pcall (require, 'std.debug_init')
    if ok then
       _DEBUG		= debug_init._DEBUG
    else
@@ -54,7 +54,7 @@ do
                t[k] = v.fast
             elseif _DEBUG == nil then
                t[k] = v.default
-            elseif type (_DEBUG) ~= "table" then
+            elseif type (_DEBUG) ~= 'table' then
                t[k] = v.safe
             elseif _DEBUG[k] ~= nil then
                t[k] = _DEBUG[k]
@@ -73,7 +73,7 @@ do
    -- Unless strict was disabled (`_DEBUG = false`), or that module is not
    -- available, check for use of undeclared variables in this module.
    if _DEBUG.strict then
-      local ok, strict = pcall (require, "std.strict")
+      local ok, strict = pcall (require, 'std.strict')
       if ok then
          _ENV = strict {}
       else
@@ -91,15 +91,15 @@ end
 
 local function getmetamethod (x, n)
    local m = (getmetatable (x) or {})[n]
-   if type (m) == "function" then return m end
+   if type (m) == 'function' then return m end
    return (getmetatable (m) or {}).__call
 end
 
 
 local function len (x)
-   local m = getmetamethod (x, "__len")
+   local m = getmetamethod (x, '__len')
    if m then return m (x) end
-   if type (x) ~= "table" then return #x end
+   if type (x) ~= 'table' then return #x end
 
    local n = #x
    for i = 1, n do
@@ -132,8 +132,8 @@ local function normalise (self, arglist)
       local opt = arglist[i]
 
       -- Split '--long-option=option-argument'.
-      if opt:sub (1, 2) == "--" then
-         local x = opt:find ("=", 3, true)
+      if opt:sub (1, 2) == '--' then
+         local x = opt:find ('=', 3, true)
          if x then
             local optname = opt:sub (1, x -1)
 
@@ -151,7 +151,7 @@ local function normalise (self, arglist)
             table_insert (normal, opt)
          end
 
-      elseif opt:sub (1, 1) == "-" and string_len (opt) > 2 then
+      elseif opt:sub (1, 1) == '-' and string_len (opt) > 2 then
          local orig, split, rest = opt, {}
          repeat
             opt, rest = opt:sub (1, 2), opt:sub (3)
@@ -167,7 +167,7 @@ local function normalise (self, arglist)
             elseif self[opt].handler ~= optional and
                self[opt].handler ~= required then
                if string_len (rest) > 0 then
-                  opt = "-" .. rest
+                  opt = '-' .. rest
                else
                   opt = nil
                end
@@ -200,7 +200,7 @@ local function set (self, opt, value)
    local key = self[opt].key
    local opts = self.opts[key]
 
-   if type (opts) == "table" then
+   if type (opts) == 'table' then
       table_insert (opts, value)
    elseif opts ~= nil then
       self.opts[key] = { opts, value }
@@ -235,13 +235,13 @@ end
 --    argument, or a default value if encountered without an optarg
 -- @treturn int index of next element of *arglist* to process
 -- @usage
--- parser:on ("--enable-nls", parser.option, parser.boolean)
+-- parser:on ('--enable-nls', parser.option, parser.boolean)
 function optional (self, arglist, i, value)
-   if i + 1 <= len (arglist) and arglist[i + 1]:sub (1, 1) ~= "-" then
+   if i + 1 <= len (arglist) and arglist[i + 1]:sub (1, 1) ~= '-' then
       return self:required (arglist, i, value)
    end
 
-   if type (value) == "function" then
+   if type (value) == 'function' then
       value = value (self, arglist[i], nil)
    elseif value == nil then
       value = true
@@ -263,12 +263,12 @@ end
 -- Normally the value stored in the `opt` table by this handler will be
 -- the string given as the argument to that option on the command line.
 -- However, if the option is given on the command-line multiple times,
--- `opt["name"]` will end up with all those arguments stored in the
+-- `opt['name']` will end up with all those arguments stored in the
 -- array part of a table:
 --
 --       $ cat ./prog
 --       ...
---       parser:on ({"-e", "-exec"}, required)
+--       parser:on ({'-e', '-exec'}, required)
 --       _G.arg, _G.opt = parser:parse (_G.arg)
 --       print (tostring (_G.opt.exec))
 --       ...
@@ -281,7 +281,7 @@ end
 --    or a forced value to replace the user's option argument.
 -- @treturn int index of next element of *arglist* to process
 -- @usage
--- parser:on ({"-o", "--output"}, parser.required)
+-- parser:on ({'-o', '--output'}, parser.required)
 function required (self, arglist, i, value)
    local opt = arglist[i]
    if i + 1 > len (arglist) then
@@ -289,7 +289,7 @@ function required (self, arglist, i, value)
       return i + 1
    end
 
-   if type (value) == "function" then
+   if type (value) == 'function' then
       value = value (self, opt, arglist[i + 1])
    elseif value == nil then
       value = arglist[i + 1]
@@ -315,7 +315,7 @@ end
 -- @int i index of last processed element of `arglist`
 -- @treturn int index of next element of `arglist` to process
 -- @usage
--- parser:on ("--", parser.finished)
+-- parser:on ('--', parser.finished)
 local function finished (self, arglist, i)
    for opt = i + 1, len (arglist) do
       table_insert (self.unrecognised, arglist[opt])
@@ -344,10 +344,10 @@ end
 --    or a value to store when this flag is encountered
 -- @treturn int index of next element of *arglist* to process
 -- @usage
--- parser:on ({"--long-opt", "-x"}, parser.flag)
+-- parser:on ({'--long-opt', '-x'}, parser.flag)
 local function flag (self, arglist, i, value)
    local opt = arglist[i]
-   if type (value) == "function" then
+   if type (value) == 'function' then
       set (self, opt, value (self, opt, true))
    elseif value == nil then
       local key = self[opt].key
@@ -365,7 +365,7 @@ end
 -- @static
 -- @function help
 -- @usage
--- parser:on ("-?", parser.version)
+-- parser:on ('-?', parser.version)
 local function help (self)
    print (self.helptext)
    os_exit (0)
@@ -379,7 +379,7 @@ end
 -- @static
 -- @function version
 -- @usage
--- parser:on ("-V", parser.version)
+-- parser:on ('-V', parser.version)
 local function version (self)
    print (self.versiontext)
    os_exit (0)
@@ -403,8 +403,8 @@ end
 -- @field yes true
 -- @field y true
 local boolvals = {
-   ["false"] = false, ["true"]   = true,
-   ["0"]     = false, ["1"]      = true,
+   ['false'] = false, ['true']   = true,
+   ['0']     = false, ['1']      = true,
    no        = false, yes        = true,
    n         = false, y          = true,
 }
@@ -414,19 +414,19 @@ local boolvals = {
 -- Report an option parse error if *optarg* is not recognised.
 --
 -- Pass this as the `value` function to @{on} when you want various
--- "truthy" or "falsey" option arguments to be coerced to a Lua `true`
+-- 'truthy' or 'falsey' option arguments to be coerced to a Lua `true`
 -- or `false` respectively in the options table.
 -- @static
 -- @string opt option name
--- @string[opt="1"] optarg option argument, must be a key in @{boolvals}
+-- @string[opt='1'] optarg option argument, must be a key in @{boolvals}
 -- @treturn bool `true` or `false`
 -- @usage
--- parser:on ("--enable-nls", parser.optional, parser.boolean)
+-- parser:on ('--enable-nls', parser.optional, parser.boolean)
 local function boolean (self, opt, optarg)
-   if optarg == nil then optarg = "1" end -- default to truthy
+   if optarg == nil then optarg = '1' end -- default to truthy
    local b = boolvals[tostring (optarg):lower ()]
    if b == nil then
-      return self:opterr (optarg .. ": Not a valid argument to " ..opt[1] .. ".")
+      return self:opterr (optarg .. ': Not a valid argument to ' ..opt[1] .. '.')
    end
    return b
 end
@@ -443,11 +443,11 @@ end
 -- @string optarg option argument, must be an existing file
 -- @treturn string *optarg*
 -- @usage
--- parser:on ("--config-file", parser.required, parser.file)
+-- parser:on ('--config-file', parser.required, parser.file)
 local function file (self, opt, optarg)
-   local h, errmsg = io_open (optarg, "r")
+   local h, errmsg = io_open (optarg, 'r')
    if h == nil then
-      return self:opterr (optarg .. ": " .. errmsg)
+      return self:opterr (optarg .. ': ' .. errmsg)
    end
    h:close ()
    return optarg
@@ -469,8 +469,8 @@ end
 local function opterr (self, msg)
    local prog = self.program
    -- Ensure final period.
-   if msg:match ("%.$") == nil then msg = msg .. "." end
-   io_stderr:write (prog .. ": error: " .. msg .. "\n")
+   if msg:match ('%.$') == nil then msg = msg .. '.' end
+   io_stderr:write (prog .. ': error: ' .. msg .. '\n')
    io_stderr:write (prog .. ": Try '" .. prog .. " --help' for help.\n")
    os_exit (2)
 end
@@ -507,25 +507,25 @@ end
 -- -- Don't process any arguments after `--`
 -- parser:on ('--', parser.finished)
 local function on (self, opts, handler, value)
-   if type (opts) == "string" then opts = { opts } end
+   if type (opts) == 'string' then opts = { opts } end
    handler = handler or flag -- unspecified options behave as flags
 
    local normal = {}
    for _, optspec in ipairs (opts) do
-      optspec:gsub ("(%S+)", function (opt)
+      optspec:gsub ('(%S+)', function (opt)
          -- 'x' => '-x'
          if string_len (opt) == 1 then
-            opt = "-" .. opt
+            opt = '-' .. opt
 
          -- 'option-name' => '--option-name'
-         elseif opt:match ("^[^%-]") ~= nil then
-            opt = "--" .. opt
+         elseif opt:match ('^[^%-]') ~= nil then
+            opt = '--' .. opt
          end
 
-         if opt:match ("^%-[^%-]+") ~= nil then
+         if opt:match ('^%-[^%-]+') ~= nil then
             -- '-xyz' => '-x -y -z'
             for i = 2, string_len (opt) do
-               table_insert (normal, "-" .. opt:sub (i, i))
+               table_insert (normal, '-' .. opt:sub (i, i))
             end
          else
             table_insert (normal, opt)
@@ -535,7 +535,7 @@ local function on (self, opts, handler, value)
 
    if next(normal) then
       -- strip leading '-', and convert non-alphanums to '_'
-      local key = last (normal):match ("^%-*(.*)$"):gsub ("%W", "_")
+      local key = last (normal):match ('^%-*(.*)$'):gsub ('%W', '_')
 
       for _, opt in ipairs (normal) do
          self[opt] = { key = key, handler = handler, value = value }
@@ -553,9 +553,9 @@ end
 -- specified by a short option, the key will be the letter of the first
 -- of the specified short options:
 --
---       {"-e", "--eval-file"} => opts.eval_file
---       {"-n", "--dryrun", "--dry-run"} => opts.dryrun
---       {"-t", "-T"} => opts.t
+--       {'-e', '--eval-file'} => opts.eval_file
+--       {'-n', '--dryrun', '--dry-run'} => opts.dryrun
+--       {'-t', '-T'} => opts.t
 --
 -- Generally there will be one key for each previously specified
 -- option (either automatically assigned by @{OptionParser} or
@@ -569,7 +569,7 @@ end
 --
 --       ./prog -x -n -x => opts = { x = true, dryrun = true }
 --       ./prog -e '(foo bar)' -e '(foo baz)'
---             => opts = {eval_file = {"(foo bar)", "(foo baz)"} }
+--             => opts = {eval_file = {'(foo bar)', '(foo baz)'} }
 --
 -- If you write your own handlers, or otherwise specify custom
 -- handling of options with @{on}, then whatever value those handlers
@@ -591,19 +591,19 @@ local function parse (self, arglist, defaults)
    while i > 0 and i <= len (arglist) do
       local opt = arglist[i]
 
-      if self[opt] == nil or opt:match "^[^%-]" then
+      if self[opt] == nil or opt:match '^[^%-]' then
          table_insert (self.unrecognised, opt)
          i = i + 1
 
          -- Following non-'-' prefixed argument is an optarg.
-         if i <= len (arglist) and arglist[i]:match "^[^%-]" then
+         if i <= len (arglist) and arglist[i]:match '^[^%-]' then
             table_insert (self.unrecognised, arglist[i])
             i = i + 1
          end
 
       -- Run option handler functions.
       else
-         assert (type (self[opt].handler) == "function")
+         assert (type (self[opt].handler) == 'function')
 
          i = self[opt].handler (self, arglist, i, self[opt].value)
       end
@@ -625,7 +625,7 @@ end
 -- @param new new handler value
 -- @return `new` if `current` is nil
 local function set_handler (current, new)
-   assert (current == nil, "only one handler per option")
+   assert (current == nil, 'only one handler per option')
    return new
 end
 
@@ -634,7 +634,7 @@ local function _init (self, spec)
    local parser = {}
 
    parser.versiontext, parser.version, parser.helptext, parser.program =
-      spec:match ("^([^\n]-(%S+)\n.-)%s*([Uu]sage: (%S+).-)%s*$")
+      spec:match ('^([^\n]-(%S+)\n.-)%s*([Uu]sage: (%S+).-)%s*$')
 
    if parser.versiontext == nil then
       error ("OptionParser spec argument must match '<version>\\n" ..
@@ -644,7 +644,7 @@ local function _init (self, spec)
    -- Collect helptext lines that begin with two or more spaces followed
    -- by a '-'.
    local specs = {}
-   parser.helptext:gsub ("\n  %s*(%-[^\n]+)", function (spec)
+   parser.helptext:gsub ('\n  %s*(%-[^\n]+)', function (spec)
       table_insert (specs, spec)
    end)
 
@@ -654,34 +654,34 @@ local function _init (self, spec)
       local options, spec, handler = {}, spec .. ' '
 
       -- Loop around each '-' prefixed option on this line.
-      while spec:match "%-[%-%w]" do
+      while spec:match '%-[%-%w]' do
 
          -- Capture end of options processing marker.
-         if spec:match "^%-%-,?%s" then
+         if spec:match '^%-%-,?%s' then
             handler = set_handler (handler, finished)
 
          -- Capture optional argument in the option string.
-         elseif spec:match "^%-[%-%w]+=%[.+%],?%s" then
+         elseif spec:match '^%-[%-%w]+=%[.+%],?%s' then
             handler = set_handler (handler, optional)
 
          -- Capture required argument in the option string.
-         elseif spec:match "^%-[%-%w]+=%S+,?%s" then
+         elseif spec:match '^%-[%-%w]+=%S+,?%s' then
             handler = set_handler (handler, required)
 
          -- Capture any specially handled arguments.
-         elseif spec:match "^%-%-help,?%s" then
+         elseif spec:match '^%-%-help,?%s' then
             handler = set_handler (handler, help)
 
-         elseif spec:match "^%-%-version,?%s" then
+         elseif spec:match '^%-%-version,?%s' then
             handler = set_handler (handler, version)
          end
 
          -- Consume argument spec, now that it was processed above.
-         spec = spec:gsub ("^(%-[%-%w]+)=%S+%s", "%1 ")
+         spec = spec:gsub ('^(%-[%-%w]+)=%S+%s', '%1 ')
 
          -- Consume short option.
-         local _, c = spec:gsub ("^%-([-%w]),?%s+(.*)$", function (opt, rest)
-            if opt == "-" then opt = "--" end
+         local _, c = spec:gsub ('^%-([-%w]),?%s+(.*)$', function (opt, rest)
+            if opt == '-' then opt = '--' end
             table_insert (options, opt)
             spec = rest
          end)
@@ -690,7 +690,7 @@ local function _init (self, spec)
          -- otherwise we might miss a handler test at the next loop.
          if c == 0 then
             -- Consume long option.
-            spec:gsub ("^%-%-([%-%w]+),?%s+(.*)$", function (opt, rest)
+            spec:gsub ('^%-%-([%-%w]+),?%s+(.*)$', function (opt, rest)
                table_insert (options, opt)
                spec = rest
             end)
@@ -745,16 +745,16 @@ return setmetatable ({
    -- appropriate.
    -- @object OptionParser
    -- @tparam OptionParser_Init _init initialisation function
-   -- @string program the first word following "Usage:" from *spec*
+   -- @string program the first word following 'Usage:' from *spec*
    -- @string version the last white-space delimited word on the first line
    --    of text from *spec*
-   -- @string versiontext everything preceding "Usage:" from *spec*, and
+   -- @string versiontext everything preceding 'Usage:' from *spec*, and
    --    which will be displayed by the @{version} @{on_handler}
-   -- @string helptext everything including and following "Usage:" from
+   -- @string helptext everything including and following 'Usage:' from
    --    *spec* string and which will be displayed by the @{help}
    --    @{on_handler}
    -- @usage
-   -- local optparse = require "optparse"
+   -- local optparse = require 'optparse'
    --
    -- local optparser = optparse [[
    -- any text VERSION
@@ -798,12 +798,12 @@ return setmetatable ({
    prototype = setmetatable ({
       -- Prototype initial values.
       opts        = {},
-      helptext    = "",
-      program     = "",
-      versiontext = "",
+      helptext    = '',
+      program     = '',
+      versiontext = '',
       version     = 0,
    }, {
-      _type = "OptionParser",
+      _type = 'OptionParser',
 
       __call = _init,
 
@@ -827,7 +827,7 @@ return setmetatable ({
    --- Metamethods
    -- @section Metamethods
 
-   _type = "Module",
+   _type = 'Module',
 
 
    -- Pass through options to the OptionParser prototype.
@@ -842,10 +842,10 @@ return setmetatable ({
    -- @treturn table|nil the submodule that was loaded to satisfy the missing
    --    `name`, otherwise `nil` if nothing was found
    -- @usage
-   -- local optparse = require "optparse"
+   -- local optparse = require 'optparse'
    -- local version = optparse.version
    __index = function (self, name)
-      local ok, t = pcall (require, "optparse." .. name)
+      local ok, t = pcall (require, 'optparse.' .. name)
       if ok then
          rawset (self, name, t)
          return t

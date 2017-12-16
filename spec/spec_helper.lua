@@ -1,15 +1,15 @@
-local inprocess = require "specl.inprocess"
-local hell      = require "specl.shell"
-local std       = require "specl.std"
+local inprocess = require 'specl.inprocess'
+local hell      = require 'specl.shell'
+local std       = require 'specl.std'
 
-badargs = require "specl.badargs"
+badargs = require 'specl.badargs'
 
-package.path = std.package.normalize ("./lib/?.lua", "./lib/?/init.lua", package.path)
+package.path = std.package.normalize ('./lib/?.lua', './lib/?/init.lua', package.path)
 
 
 -- Allow user override of LUA binary used by hell.spawn, falling
--- back to environment PATH search for "lua" if nothing else works.
-local LUA = os.getenv "LUA" or "lua"
+-- back to environment PATH search for 'lua' if nothing else works.
+local LUA = os.getenv 'LUA' or 'lua'
 
 
 -- Allow use of bare 'unpack' even in Lua 5.3.
@@ -20,8 +20,8 @@ unpack = table.unpack or unpack
 -- valued __len metamethod, so don't write examples that need that!
 function len (x)
    local __len = getmetatable (x) or {}
-   if type (__len) == "function" then return __len (x) end
-   if type (x) ~= "table" then return #x end
+   if type (__len) == 'function' then return __len (x) end
+   if type (x) ~= 'table' then return #x end
 
    local n = #x
    for i = 1, n do
@@ -52,7 +52,7 @@ end
 
 local function mkscript (code)
    local f = os.tmpname ()
-   local h = io.open (f, "w")
+   local h = io.open (f, 'w')
    h:write (code)
    h:close ()
    return f
@@ -68,11 +68,11 @@ end
 --    execution was successful, otherwise nil
 function luaproc (code, arg, stdin)
    local f = mkscript (code)
-   if type (arg) ~= "table" then arg = {arg} end
+   if type (arg) ~= 'table' then arg = {arg} end
    local cmd = {LUA, f, unpack (arg, 1, len (arg))}
    -- inject env and stdin keys separately to avoid truncating `...` in
    -- cmd constructor
-   cmd.env = { LUA_PATH=package.path, LUA_INIT="", LUA_INIT_5_2="" }
+   cmd.env = { LUA_PATH=package.path, LUA_INIT='', LUA_INIT_5_2='' }
    cmd.stdin = stdin
    local proc = hell.spawn (cmd)
    os.remove (f)
@@ -84,15 +84,15 @@ local function tabulate_output (code)
    local proc = luaproc (code)
    if proc.status ~= 0 then return error (proc.errout) end
    local r = {}
-   proc.output:gsub ("(%S*)[%s]*", function (x)
-      if x ~= "" then r[x] = true end
+   proc.output:gsub ('(%S*)[%s]*', function (x)
+      if x ~= '' then r[x] = true end
    end)
    return r
 end
 
 
 --- Show changes to tables wrought by a require statement.
--- Lists new keys in T1 after `require "import"`:
+-- Lists new keys in T1 after `require 'import'`:
 --
 --       show_apis {added_to=T1, by=import}
 --
@@ -105,7 +105,7 @@ function show_apis (argt)
          before[k] = true
       end
 
-      local M = require "]] .. argt.by .. [["
+      local M = require ']] .. argt.by .. [['
       for k in pairs (]] .. argt.added_to .. [[) do
          after[k] = true
       end

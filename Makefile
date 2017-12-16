@@ -17,11 +17,11 @@ all: doc $(luadir)/version.lua
 
 
 $(luadir)/version.lua: .FORCE
-	@echo 'return "Parse Command-Line Options / $(VERSION)"' > '$@T';	\
+	@echo "return 'Parse Command-Line Options / $(VERSION)'" > '$@T';	\
 	if cmp -s '$@' '$@T'; then						\
 	    rm -f '$@T';							\
 	else									\
-	    echo 'echo "Parse Command-Line Options / $(VERSION)" > $@';		\
+	    echo "echo 'Parse Command-Line Options / $(VERSION)' > $@";		\
 	    mv '$@T' '$@';							\
 	fi
 
