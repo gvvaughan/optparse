@@ -26,11 +26,14 @@ local setmetatable = setmetatable
 local tostring = tostring
 local type = type
 
-local io_open = io.open
-local io_stderr = io.stderr
-local os_exit = os.exit
-local string_len = string.len
-local table_insert = table.insert
+local exit = os.exit
+local find = string.find
+local gsub = string.gsub
+local lower = string.lower
+local match = string.match
+local open = io.open
+local stderr = io.stderr
+local sub = string.sub
 
 
 
@@ -140,15 +143,15 @@ local function normalise(self, arglist)
       local opt = arglist[i]
 
       -- Split '--long-option=option-argument'.
-      if opt:sub(1, 2) == '--' then
-         local x = opt:find('=', 3, true)
+      if sub(opt, 1, 2) == '--' then
+         local x = find(opt, '=', 3, true)
          if x then
-            local optname = opt:sub(1, x -1)
+            local optname = sub(opt, 1, x -1)
 
             -- Only split recognised long options.
             if self[optname] then
-               table_insert(normal, optname)
-               table_insert(normal, opt:sub(x + 1))
+               normal[#normal + 1] = optname
+               normal[#normal + 1] = sub(opt, x + 1)
             else
                x = nil
             end
@@ -156,13 +159,13 @@ local function normalise(self, arglist)
 
          if x == nil then
             -- No '=', or substring before '=' is not a known option name.
-            table_insert(normal, opt)
+            normal[#normal + 1] = opt
          end
 
-      elseif opt:sub(1, 1) == '-' and string_len(opt) > 2 then
+      elseif sub(opt, 1, 1) == '-' and len(opt) > 2 then
          local orig, split, rest = opt, {}
          repeat
-            opt, rest = opt:sub(1, 2), opt:sub(3)
+            opt, rest = sub(opt, 1, 2), sub(opt, 3)
 
             split[#split + 1] = opt
 
@@ -174,7 +177,7 @@ local function normalise(self, arglist)
             -- Split '-xyz' into '-x -yz', and reiterate for '-yz'
             elseif self[opt].handler ~= optional and
                self[opt].handler ~= required then
-               if string_len(rest) > 0 then
+               if len(rest) > 0 then
                   opt = '-' .. rest
                else
                   opt = nil
@@ -189,10 +192,10 @@ local function normalise(self, arglist)
 
          -- Append split options to normalised list
          for _, v in ipairs(split) do
-            table_insert(normal, v)
+            normal[#normal + 1] = v
          end
       else
-         table_insert(normal, opt)
+         normal[#normal + 1] = opt
       end
    end
 
@@ -211,7 +214,7 @@ local function set(self, opt, value)
    local opts = self.opts[key]
 
    if type(opts) == 'table' then
-      table_insert(opts, value)
+      opts[#opts + 1] = value
    elseif opts ~= nil then
       self.opts[key] = {opts, value}
    else
@@ -247,7 +250,7 @@ end
 -- @usage
 -- parser:on('--enable-nls', parser.option, parser.boolean)
 function optional(self, arglist, i, value)
-   if i + 1 <= len(arglist) and arglist[i + 1]:sub(1, 1) ~= '-' then
+   if i + 1 <= len(arglist) and sub(arglist[i + 1], 1, 1) ~= '-' then
       return self:required(arglist, i, value)
    end
 
@@ -327,8 +330,9 @@ end
 -- @usage
 -- parser:on('--', parser.finished)
 local function finished(self, arglist, i)
+   local unrecognised = self.unrecognised
    for opt = i + 1, len(arglist) do
-      table_insert(self.unrecognised, arglist[opt])
+      unrecognised[#unrecognised + 1] = arglist[opt]
    end
    return 1 + len(arglist)
 end
@@ -378,7 +382,7 @@ end
 -- parser:on('-?', parser.version)
 local function help(self)
    print(self.helptext)
-   os_exit(0)
+   exit(0)
 end
 
 
@@ -392,7 +396,7 @@ end
 -- parser:on('-V', parser.version)
 local function version(self)
    print(self.versiontext)
-   os_exit(0)
+   exit(0)
 end
 
 
@@ -436,7 +440,7 @@ local function boolean(self, opt, optarg)
    if optarg == nil then
       optarg = '1' -- default to truthy
    end
-   local b = boolvals[tostring(optarg):lower()]
+   local b = boolvals[lower(tostring(optarg))]
    if b == nil then
       return self:opterr(optarg .. ': Not a valid argument to ' ..opt[1] .. '.')
    end
@@ -457,7 +461,7 @@ end
 -- @usage
 -- parser:on('--config-file', parser.required, parser.file)
 local function file(self, opt, optarg)
-   local h, errmsg = io_open(optarg, 'r')
+   local h, errmsg = open(optarg, 'r')
    if h == nil then
       return self:opterr(optarg .. ': ' .. errmsg)
    end
@@ -481,12 +485,12 @@ end
 local function opterr(self, msg)
    local prog = self.program
    -- Ensure final period.
-   if msg:match('%.$') == nil then
+   if match(msg, '%.$') == nil then
       msg = msg .. '.'
    end
-   io_stderr:write(prog .. ': error: ' .. msg .. '\n')
-   io_stderr:write(prog .. ": Try '" .. prog .. " --help' for help.\n")
-   os_exit(2)
+   stderr:write(prog .. ': error: ' .. msg .. '\n')
+   stderr:write(prog .. ": Try '" .. prog .. " --help' for help.\n")
+   exit(2)
 end
 
 
@@ -528,30 +532,30 @@ local function on(self, opts, handler, value)
 
    local normal = {}
    for _, optspec in ipairs(opts) do
-      optspec:gsub('(%S+)', function(opt)
+      gsub(optspec, '(%S+)', function(opt)
          -- 'x' => '-x'
-         if string_len(opt) == 1 then
+         if len(opt) == 1 then
             opt = '-' .. opt
 
          -- 'option-name' => '--option-name'
-         elseif opt:match('^[^%-]') ~= nil then
+         elseif match(opt, '^[^%-]') ~= nil then
             opt = '--' .. opt
          end
 
-         if opt:match('^%-[^%-]+') ~= nil then
+         if match(opt, '^%-[^%-]+') ~= nil then
             -- '-xyz' => '-x -y -z'
-            for i = 2, string_len(opt) do
-               table_insert(normal, '-' .. opt:sub(i, i))
+            for i = 2, len(opt) do
+               normal[#normal + 1] = '-' .. sub(opt, i, i)
             end
          else
-            table_insert(normal, opt)
+            normal[#normal + 1] = opt
          end
       end)
    end
 
    if next(normal) then
       -- strip leading '-', and convert non-alphanums to '_'
-      local key = last(normal):match('^%-*(.*)$'):gsub('%W', '_')
+      local key = gsub(match(last(normal), '^%-*(.*)$'), '%W', '_')
 
       for _, opt in ipairs(normal) do
          self[opt] = {key=key, handler=handler, value=value}
@@ -607,13 +611,13 @@ local function parse(self, arglist, defaults)
    while i > 0 and i <= len(arglist) do
       local opt = arglist[i]
 
-      if self[opt] == nil or opt:match '^[^%-]' then
-         table_insert(self.unrecognised, opt)
+      if self[opt] == nil or match(opt, '^[^%-]') then
+         self.unrecognised[#self.unrecognised + 1] = opt
          i = i + 1
 
          -- Following non-'-' prefixed argument is an optarg.
-         if i <= len(arglist) and arglist[i]:match '^[^%-]' then
-            table_insert(self.unrecognised, arglist[i])
+         if i <= len(arglist) and match(arglist[i], '^[^%-]') then
+            self.unrecognised[#self.unrecognised + 1] = arglist[i]
             i = i + 1
          end
 
@@ -652,7 +656,7 @@ local function _init(self, spec)
    local parser = {}
 
    parser.versiontext, parser.version, parser.helptext, parser.program =
-      spec:match('^([^\n]-(%S+)\n.-)%s*([Uu]sage: (%S+).-)%s*$')
+      match(spec, '^([^\n]-(%S+)\n.-)%s*([Uu]sage: (%S+).-)%s*$')
 
    if parser.versiontext == nil then
       error("OptionParser spec argument must match '<version>\\n" ..
@@ -662,8 +666,8 @@ local function _init(self, spec)
    -- Collect helptext lines that begin with two or more spaces followed
    -- by a '-'.
    local specs = {}
-   parser.helptext:gsub('\n  %s*(%-[^\n]+)', function(spec)
-      table_insert(specs, spec)
+   gsub(parser.helptext, '\n  %s*(%-[^\n]+)', function(spec)
+      specs[#specs + 1] = spec
    end)
 
    -- Register option handlers according to the help text.
@@ -672,37 +676,37 @@ local function _init(self, spec)
       local options, spec, handler = {}, spec .. ' '
 
       -- Loop around each '-' prefixed option on this line.
-      while spec:match '%-[%-%w]' do
+      while match(spec, '%-[%-%w]') do
 
          -- Capture end of options processing marker.
-         if spec:match '^%-%-,?%s' then
+         if match(spec, '^%-%-,?%s') then
             handler = set_handler(handler, finished)
 
          -- Capture optional argument in the option string.
-         elseif spec:match '^%-[%-%w]+=%[.+%],?%s' then
+         elseif match(spec, '^%-[%-%w]+=%[.+%],?%s') then
             handler = set_handler(handler, optional)
 
          -- Capture required argument in the option string.
-         elseif spec:match '^%-[%-%w]+=%S+,?%s' then
+         elseif match(spec, '^%-[%-%w]+=%S+,?%s') then
             handler = set_handler(handler, required)
 
          -- Capture any specially handled arguments.
-         elseif spec:match '^%-%-help,?%s' then
+         elseif match(spec, '^%-%-help,?%s') then
             handler = set_handler(handler, help)
 
-         elseif spec:match '^%-%-version,?%s' then
+         elseif match(spec, '^%-%-version,?%s') then
             handler = set_handler(handler, version)
          end
 
          -- Consume argument spec, now that it was processed above.
-         spec = spec:gsub('^(%-[%-%w]+)=%S+%s', '%1 ')
+         spec = gsub(spec, '^(%-[%-%w]+)=%S+%s', '%1 ')
 
          -- Consume short option.
-         local _, c = spec:gsub('^%-([-%w]),?%s+(.*)$', function(opt, rest)
+         local _, c = gsub(spec, '^%-([-%w]),?%s+(.*)$', function(opt, rest)
             if opt == '-' then
               opt = '--'
             end
-            table_insert(options, opt)
+            options[#options + 1] = opt
             spec = rest
          end)
 
@@ -710,8 +714,8 @@ local function _init(self, spec)
          -- otherwise we might miss a handler test at the next loop.
          if c == 0 then
             -- Consume long option.
-            spec:gsub('^%-%-([%-%w]+),?%s+(.*)$', function(opt, rest)
-               table_insert(options, opt)
+            gsub(spec, '^%-%-([%-%w]+),?%s+(.*)$', function(opt, rest)
+               options[#options + 1] = opt
                spec = rest
             end)
          end

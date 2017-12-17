@@ -16,6 +16,9 @@ local LUA = os.getenv 'LUA' or 'lua'
 unpack = table.unpack or unpack
 
 
+local gsub = string.gsub
+
+
 -- Simplified version for specifications, does not support functable
 -- valued __len metamethod, so don't write examples that need that!
 function len(x)
@@ -96,7 +99,7 @@ local function tabulate_output(code)
       return error(proc.errout)
    end
    local r = {}
-   proc.output:gsub('(%S*)[%s]*', function(x)
+   gsub(proc.output, '(%S*)[%s]*', function(x)
       if x ~= '' then
          r[x] = true
       end
