@@ -20,12 +20,18 @@ unpack = table.unpack or unpack
 -- valued __len metamethod, so don't write examples that need that!
 function len(x)
    local __len = getmetatable(x) or {}
-   if type(__len) == 'function' then return __len(x) end
-   if type(x) ~= 'table' then return #x end
+   if type(__len) == 'function' then
+      return __len(x)
+   end
+   if type(x) ~= 'table' then
+      return #x
+   end
 
    local n = #x
    for i = 1, n do
-      if x[i] == nil then return i -1 end
+      if x[i] == nil then
+         return i -1
+      end
    end
    return n
 end
@@ -42,7 +48,9 @@ function bind(f, fix)
       end
       local i = 1
       for _, v in pairs {...} do
-         while arg[i] ~= nil do i = i + 1 end
+         while arg[i] ~= nil do
+            i = i + 1
+         end
          arg[i] = v
       end
       return f(unpack(arg, 1, len(arg)))
@@ -68,7 +76,9 @@ end
 --    execution was successful, otherwise nil
 function luaproc(code, arg, stdin)
    local f = mkscript(code)
-   if type(arg) ~= 'table' then arg = {arg} end
+   if type(arg) ~= 'table' then
+      arg = {arg}
+   end
    local cmd = {LUA, f, unpack(arg, 1, len(arg))}
    -- inject env and stdin keys separately to avoid truncating `...` in
    -- cmd constructor
@@ -82,10 +92,14 @@ end
 
 local function tabulate_output(code)
    local proc = luaproc(code)
-   if proc.status ~= 0 then return error(proc.errout) end
+   if proc.status ~= 0 then
+      return error(proc.errout)
+   end
    local r = {}
    proc.output:gsub('(%S*)[%s]*', function(x)
-      if x ~= '' then r[x] = true end
+      if x ~= '' then
+         r[x] = true
+      end
    end)
    return r
 end
@@ -111,7 +125,9 @@ function show_apis(argt)
       end
 
       for k in pairs(after) do
-         if not before[k] then print(k) end
+         if not before[k] then
+            print(k)
+         end
       end
    ]])
 end

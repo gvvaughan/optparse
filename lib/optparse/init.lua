@@ -91,19 +91,27 @@ end
 
 local function getmetamethod(x, n)
    local m =(getmetatable(x) or {})[n]
-   if type(m) == 'function' then return m end
+   if type(m) == 'function' then
+      return m
+   end
    return(getmetatable(m) or {}).__call
 end
 
 
 local function len(x)
    local m = getmetamethod(x, '__len')
-   if m then return m(x) end
-   if type(x) ~= 'table' then return #x end
+   if m then
+      return m(x)
+   end
+   if type(x) ~= 'table' then
+      return #x
+   end
 
    local n = #x
    for i = 1, n do
-      if x[i] == nil then return i -1 end
+      if x[i] == nil then
+         return i -1
+      end
    end
    return n
 end
@@ -180,7 +188,9 @@ local function normalise(self, arglist)
          until opt == nil
 
          -- Append split options to normalised list
-         for _, v in ipairs(split) do table_insert(normal, v) end
+         for _, v in ipairs(split) do
+            table_insert(normal, v)
+         end
       else
          table_insert(normal, opt)
       end
@@ -423,7 +433,9 @@ local boolvals = {
 -- @usage
 -- parser:on('--enable-nls', parser.optional, parser.boolean)
 local function boolean(self, opt, optarg)
-   if optarg == nil then optarg = '1' end -- default to truthy
+   if optarg == nil then
+      optarg = '1' -- default to truthy
+   end
    local b = boolvals[tostring(optarg):lower()]
    if b == nil then
       return self:opterr(optarg .. ': Not a valid argument to ' ..opt[1] .. '.')
@@ -469,7 +481,9 @@ end
 local function opterr(self, msg)
    local prog = self.program
    -- Ensure final period.
-   if msg:match('%.$') == nil then msg = msg .. '.' end
+   if msg:match('%.$') == nil then
+      msg = msg .. '.'
+   end
    io_stderr:write(prog .. ': error: ' .. msg .. '\n')
    io_stderr:write(prog .. ": Try '" .. prog .. " --help' for help.\n")
    os_exit(2)
@@ -507,7 +521,9 @@ end
 -- -- Don't process any arguments after `--`
 -- parser:on('--', parser.finished)
 local function on(self, opts, handler, value)
-   if type(opts) == 'string' then opts = {opts} end
+   if type(opts) == 'string' then
+      opts = {opts}
+   end
    handler = handler or flag -- unspecified options behave as flags
 
    local normal = {}
@@ -611,7 +627,9 @@ local function parse(self, arglist, defaults)
 
    -- Merge defaults into user options.
    for k, v in pairs(defaults or {}) do
-      if self.opts[k] == nil then self.opts[k] = v end
+      if self.opts[k] == nil then
+         self.opts[k] = v
+      end
    end
 
    -- metatable allows `io.warn` to find `parser.program` when assigned
@@ -681,7 +699,9 @@ local function _init(self, spec)
 
          -- Consume short option.
          local _, c = spec:gsub('^%-([-%w]),?%s+(.*)$', function(opt, rest)
-            if opt == '-' then opt = '--' end
+            if opt == '-' then
+              opt = '--'
+            end
             table_insert(options, opt)
             spec = rest
          end)
@@ -831,7 +851,9 @@ return setmetatable({
 
 
    -- Pass through options to the OptionParser prototype.
-   __call = function(self, ...) return self.prototype(...) end,
+   __call = function(self, ...)
+      return self.prototype(...)
+   end,
 
 
    --- Lazy loading of optparse submodules.
