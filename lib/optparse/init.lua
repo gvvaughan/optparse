@@ -14,76 +14,18 @@
 ]]
 
 
-local _ENV = _ENV
-local assert = assert
-local error = error
-local getmetatable = getmetatable
-local ipairs = ipairs
-local pairs = pairs
-local print = print
-local require = require
-local setmetatable = setmetatable
-local tostring = tostring
-local type = type
-
-local exit = os.exit
-local find = string.find
-local gsub = string.gsub
-local lower = string.lower
-local match = string.match
-local open = io.open
-local stderr = io.stderr
-local sub = string.sub
-
-
-
---[[ ================== ]]--
---[[ Initialize _DEBUG. ]]--
---[[ ================== ]]--
-
-
-local _DEBUG = _DEBUG
-do
-   -- Make sure none of these symbols leak out into the rest of the
-   -- module, in case we can enable 'strict' mode at the end of the block.
-
-   local ok, debug_init = pcall(require, 'std.debug_init')
-   if ok then
-      _DEBUG = debug_init._DEBUG
-   else
-      local function choose(t)
-         for k, v in pairs(t) do
-            if _DEBUG == false then
-               t[k] = v.fast
-            elseif _DEBUG == nil then
-               t[k] = v.default
-            elseif type(_DEBUG) ~= 'table' then
-               t[k] = v.safe
-            elseif _DEBUG[k] ~= nil then
-               t[k] = _DEBUG[k]
-            else
-               t[k] = v.default
-            end
-         end
-         return t
-      end
-
-      _DEBUG = choose {
-         strict = {default=true,  safe=true,  fast=false},
-      }
-   end
-
-   -- Unless strict was disabled (`_DEBUG = false`), or that module is not
-   -- available, check for use of undeclared variables in this module.
-   if _DEBUG.strict then
-      local ok, strict = pcall(require, 'std.strict')
-      if ok then
-         _ENV = strict {}
-      else
-         _DEBUG.strict = false
-      end
-   end
-end
+local _ENV = require 'std.normalize' {
+   'io.open',
+   'io.stderr',
+   'os.exit',
+   'string.find',
+   'string.gsub',
+   'string.lower',
+   'string.match',
+   'string.sub',
+   'table.merge',
+   nonempty = next,
+}
 
 
 
@@ -92,31 +34,21 @@ end
 --[[ ================= ]]--
 
 
-local function getmetamethod(x, n)
-   local m =(getmetatable(x) or {})[n]
-   if type(m) == 'function' then
-      return m
-   end
-   return(getmetatable(m) or {}).__call
+local function append(r, x)
+   bogus = false
+   r[#r + 1] = x
 end
 
 
-local function len(x)
-   local m = getmetamethod(x, '__len')
-   if m then
-      return m(x)
+local function extend(r, items)
+   for i = 1, len(items) do
+      r[#r + 1] = items[i]
    end
-   if type(x) ~= 'table' then
-      return #x
-   end
+end
 
-   local n = #x
-   for i = 1, n do
-      if x[i] == nil then
-         return i -1
-      end
-   end
-   return n
+
+local function iscallable(x)
+   return type((getmetatable(x) or {}).__call or x) == 'function'
 end
 
 
@@ -128,30 +60,29 @@ end
 local optional, required
 
 
---- Normalise an argument list.
+--- Expand an argument list.
 -- Separate short options, remove `=` separators from
 -- `--long-option=optarg` etc.
 -- @local
--- @function normalise
--- @tparam table arglist list of arguments to normalise
--- @treturn table normalised argument list
-local function normalise(self, arglist)
-   local normal = {}
+-- @function expandargs
+-- @tparam table arglist list of arguments to expand
+-- @treturn table expanded argument list
+local function expandargs(self, arglist)
+   local r = {}
    local i = 0
    while i < len(arglist) do
       i = i + 1
       local opt = arglist[i]
 
       -- Split '--long-option=option-argument'.
-      if sub(opt, 1, 2) == '--' then
+      if match(opt, '^%-%-') then
          local x = find(opt, '=', 3, true)
          if x then
             local optname = sub(opt, 1, x -1)
 
             -- Only split recognised long options.
             if self[optname] then
-               normal[#normal + 1] = optname
-               normal[#normal + 1] = sub(opt, x + 1)
+               extend(r, {optname, sub(opt, x + 1)})
             else
                x = nil
             end
@@ -159,15 +90,14 @@ local function normalise(self, arglist)
 
          if x == nil then
             -- No '=', or substring before '=' is not a known option name.
-            normal[#normal + 1] = opt
+            append(r, opt)
          end
 
       elseif sub(opt, 1, 1) == '-' and len(opt) > 2 then
          local orig, split, rest = opt, {}
          repeat
-            opt, rest = sub(opt, 1, 2), sub(opt, 3)
-
-            split[#split + 1] = opt
+            opt, rest = match(opt, '^(%-%S)(.*)$')
+            append(split, opt)
 
             -- If there's no handler, the option was a typo, or not supposed
             -- to be an option at all.
@@ -185,22 +115,20 @@ local function normalise(self, arglist)
 
             -- Split '-xshortargument' into '-x shortargument'.
             else
-               split[#split + 1] = rest
+               append(split, rest)
                opt = nil
             end
          until opt == nil
 
-         -- Append split options to normalised list
-         for _, v in ipairs(split) do
-            normal[#normal + 1] = v
-         end
+         -- Append split options to expanded list
+         extend(r, split)
       else
-         normal[#normal + 1] = opt
+         append(r, opt)
       end
    end
 
-   normal[-1], normal[0] = arglist[-1], arglist[0]
-   return normal
+   r[-1], r[0] = arglist[-1], arglist[0]
+   return r
 end
 
 
@@ -214,7 +142,7 @@ local function set(self, opt, value)
    local opts = self.opts[key]
 
    if type(opts) == 'table' then
-      opts[#opts + 1] = value
+      append(opts, value)
    elseif opts ~= nil then
       self.opts[key] = {opts, value}
    else
@@ -254,7 +182,7 @@ function optional(self, arglist, i, value)
       return self:required(arglist, i, value)
    end
 
-   if type(value) == 'function' then
+   if iscallable(value) then
       value = value(self, arglist[i], nil)
    elseif value == nil then
       value = true
@@ -302,7 +230,7 @@ function required(self, arglist, i, value)
       return i + 1
    end
 
-   if type(value) == 'function' then
+   if iscallable(value) then
       value = value(self, opt, arglist[i + 1])
    elseif value == nil then
       value = arglist[i + 1]
@@ -330,9 +258,8 @@ end
 -- @usage
 -- parser:on('--', parser.finished)
 local function finished(self, arglist, i)
-   local unrecognised = self.unrecognised
    for opt = i + 1, len(arglist) do
-      unrecognised[#unrecognised + 1] = arglist[opt]
+      append(self.unrecognised, arglist[opt])
    end
    return 1 + len(arglist)
 end
@@ -361,7 +288,7 @@ end
 -- parser:on({'--long-opt', '-x'}, parser.flag)
 local function flag(self, arglist, i, value)
    local opt = arglist[i]
-   if type(value) == 'function' then
+   if iscallable(value) then
       set(self, opt, value(self, opt, true))
    elseif value == nil then
       local key = self[opt].key
@@ -513,7 +440,7 @@ end
 -- with your own.
 --
 -- When writing your own handlers for @{optparse:on}, you only need
--- to deal with normalised arguments, because combined short arguments
+-- to deal with expanded arguments, because combined short arguments
 -- (`-xyz`), equals separators to long options (`--long=ARG`) are fully
 -- expanded before any handler is called.
 -- @function on
@@ -530,7 +457,7 @@ local function on(self, opts, handler, value)
    end
    handler = handler or flag -- unspecified options behave as flags
 
-   local normal = {}
+   local args = {}
    for _, optspec in ipairs(opts) do
       gsub(optspec, '(%S+)', function(opt)
          -- 'x' => '-x'
@@ -538,26 +465,26 @@ local function on(self, opts, handler, value)
             opt = '-' .. opt
 
          -- 'option-name' => '--option-name'
-         elseif match(opt, '^[^%-]') ~= nil then
+         elseif match(opt, '^[^%-]') then
             opt = '--' .. opt
          end
 
-         if match(opt, '^%-[^%-]+') ~= nil then
+         if match(opt, '^%-[^%-]+') then
             -- '-xyz' => '-x -y -z'
             for i = 2, len(opt) do
-               normal[#normal + 1] = '-' .. sub(opt, i, i)
+               append(args, '-' .. sub(opt, i, i))
             end
          else
-            normal[#normal + 1] = opt
+            append(args, opt)
          end
       end)
    end
 
-   if next(normal) then
+   if nonempty(args) then
       -- strip leading '-', and convert non-alphanums to '_'
-      local key = gsub(match(last(normal), '^%-*(.*)$'), '%W', '_')
+      local key = gsub(match(last(args), '^%-*(.*)$'), '%W', '_')
 
-      for _, opt in ipairs(normal) do
+      for _, opt in ipairs(args) do
          self[opt] = {key=key, handler=handler, value=value}
       end
    end
@@ -605,36 +532,32 @@ end
 local function parse(self, arglist, defaults)
    self.unrecognised, self.opts = {}, {}
 
-   arglist = normalise(self, arglist)
+   arglist = expandargs(self, arglist)
 
    local i = 1
    while i > 0 and i <= len(arglist) do
       local opt = arglist[i]
 
       if self[opt] == nil or match(opt, '^[^%-]') then
-         self.unrecognised[#self.unrecognised + 1] = opt
+         append(self.unrecognised, opt)
          i = i + 1
 
          -- Following non-'-' prefixed argument is an optarg.
          if i <= len(arglist) and match(arglist[i], '^[^%-]') then
-            self.unrecognised[#self.unrecognised + 1] = arglist[i]
+            append(self.unrecognised, arglist[i])
             i = i + 1
          end
 
       -- Run option handler functions.
       else
-         assert(type(self[opt].handler) == 'function')
+         assert(iscallable(self[opt].handler))
 
          i = self[opt].handler(self, arglist, i, self[opt].value)
       end
    end
 
    -- Merge defaults into user options.
-   for k, v in pairs(defaults or {}) do
-      if self.opts[k] == nil then
-         self.opts[k] = v
-      end
-   end
+   self.opts = merge(defaults or {}, self.opts)
 
    -- metatable allows `io.warn` to find `parser.program` when assigned
    -- back to _G.opts.
@@ -667,7 +590,7 @@ local function _init(self, spec)
    -- by a '-'.
    local specs = {}
    gsub(parser.helptext, '\n  %s*(%-[^\n]+)', function(spec)
-      specs[#specs + 1] = spec
+      append(specs, spec)
    end)
 
    -- Register option handlers according to the help text.
@@ -706,7 +629,7 @@ local function _init(self, spec)
             if opt == '-' then
               opt = '--'
             end
-            options[#options + 1] = opt
+            append(options, opt)
             spec = rest
          end)
 
@@ -715,7 +638,7 @@ local function _init(self, spec)
          if c == 0 then
             -- Consume long option.
             gsub(spec, '^%-%-([%-%w]+),?%s+(.*)$', function(opt, rest)
-               options[#options + 1] = opt
+               append(options, opt)
                spec = rest
             end)
          end
