@@ -4,7 +4,7 @@ MKDIR	= mkdir -p
 SED	= sed
 SPECL	= specl
 
-VERSION	= 1.2
+VERSION	= 1.3
 
 luadir	= lib/optparse
 SOURCES =				\
@@ -13,7 +13,7 @@ SOURCES =				\
 	$(NOTHING_ELSE)
 
 
-all: doc $(luadir)/version.lua
+all:
 
 
 $(luadir)/version.lua: .FORCE

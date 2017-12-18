@@ -1,7 +1,5 @@
 # optparse NEWS - User visible changes
 
-## Noteworthy changes in release ?.? (????-??-??) [?]
-
 
 ## Noteworthy changes in release 1.3 (2017-12-17) [stable]
 

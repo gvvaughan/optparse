@@ -2,6 +2,5 @@
 .DS_Store
 /*.src.rock
 /build-aux/config.ld
-/doc/*
 /luacov.*.out
 /optparse-*.tar.gz

@@ -1,4 +1,4 @@
-local _MODREV, _SPECREV = 'git', '-1'
+local _MODREV, _SPECREV = '1.3', '-1'
 
 package = 'optparse'
 version = _MODREV .. _SPECREV
@@ -27,7 +27,6 @@ source = (function(gitp)
 end)(_MODREV == 'git')
 
 dependencies = {
-   'ldoc',
    'lua >= 5.1, < 5.4',
    'std.normalize > 2.0',
 }
