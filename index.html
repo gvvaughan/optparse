@@ -3,7 +3,7 @@
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <head>
-    <title>optparse 1.2 Reference</title>
+    <title>optparse 1.3 Reference</title>
     <link rel="stylesheet" href="ldoc.css" type="text/css" />
 </head>
 <body>
@@ -24,7 +24,7 @@
 
 <div id="navigation">
 <br/>
-<h1>optparse 1.2</h1>
+<h1>optparse 1.3</h1>
 
 
 <h2>Contents</h2>
@@ -94,7 +94,7 @@
 	<td class="summary">Option should display version text, then exit.</td>
 	</tr>
 	<tr>
-	<td class="name" nowrap><a href="#boolean">boolean (opt[, optarg="1"])</a></td>
+	<td class="name" nowrap><a href="#boolean">boolean (opt[, optarg='1'])</a></td>
 	<td class="summary">Return a Lua boolean equivalent of various <em>optarg</em> strings.</td>
 	</tr>
 	<tr>
@@ -168,9 +168,9 @@
  into <code>_G.arg</code> (usually filenames or similar), and <code>_G.opts</code> will be a
  table of successfully parsed option values. The keys into this table
  are the long-options with leading hyphens stripped, and non-word
- characters turned to <code>_</code>.  For example if <code>--another-long</code> had been
+ characters turned to <code>_</code>.   For example if <code>--another-long</code> had been
  found in the initial <code>_G.arg</code>, then <code>_G.opts</code> will have a key named
- <code>another_long</code>, with an appropriate value.  If there is no long
+ <code>another_long</code>, with an appropriate value.   If there is no long
  option name, then the short option is used, i.e. <code>_G.opts.b</code> will be
  set.</p>
 
@@ -187,23 +187,32 @@
         </li>
         <li><span class="parameter">program</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-         the first word following "Usage:" from <em>spec</em>
+         the first word following 'Usage:' from <em>spec</em>
         </li>
         <li><span class="parameter">version</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-         the last white-space delimited word on the first line
-   of text from <em>spec</em>
+
+<p> the last white-space delimited word on the first line</p>
+<pre><code>of text from *spec*
+</code></pre>
+
         </li>
         <li><span class="parameter">versiontext</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-         everything preceding "Usage:" from <em>spec</em>, and
-   which will be displayed by the <a href="index.html#version">version</a> <a href="index.html#on_handler">on_handler</a>
+
+<p> everything preceding 'Usage:' from <em>spec</em>, and</p>
+<pre><code>which will be displayed by the &lt;a href="index.html#version"&gt;version&lt;/a&gt; &lt;a href="index.html#on_handler"&gt;on\_handler&lt;/a&gt;
+</code></pre>
+
         </li>
         <li><span class="parameter">helptext</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
-         everything including and following "Usage:" from
-   <em>spec</em> string and which will be displayed by the <a href="index.html#help">help</a>
-   <a href="index.html#on_handler">on_handler</a>
+
+<p> everything including and following 'Usage:' from</p>
+<pre><code>*spec* string and which will be displayed by the &lt;a href="index.html#help"&gt;help&lt;/a&gt;
+&lt;a href="index.html#on_handler"&gt;on\_handler&lt;/a&gt;
+</code></pre>
+
         </li>
     </ul>
 
@@ -212,7 +221,7 @@
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> optparse = <span class="global">require</span> <span class="string">"optparse"</span>
+        <pre class="example"><span class="keyword">local</span> optparse = <span class="global">require</span> <span class="string">'optparse'</span>
 
 <span class="keyword">local</span> optparser = optparse <span class="string">[[
 any text VERSION
@@ -244,7 +253,7 @@ Options:
       --version            display version information, then exit
       --help               display this help, then exit
 
-Footer text.  Several lines or paragraphs are permitted.
+Footer text.   Several lines or paragraphs are permitted.
 
 Please report bugs at bug-list@yourhost.com
 ]]</span>
@@ -252,7 +261,7 @@ Please report bugs at bug-list@yourhost.com
 <span class="comment">-- Note that `std.io.die` and `std.io.warn` will only prefix messages
 </span><span class="comment">-- with `parser.program` if the parser options are assigned back to
 </span><span class="comment">-- `_G.opts`:
-</span>_G.arg, _G.opts = optparser:parse (_G.arg)</pre>
+</span>_G.arg, _G.opts = optparser:parse(_G.arg)</pre>
     </ul>
 
 </dd>
@@ -271,7 +280,7 @@ Please report bugs at bug-list@yourhost.com
 
 <p> This is the handler automatically assigned to options that have
  <code>--opt=[ARG]</code> style specifications in the <a href="index.html#OptionParser">OptionParser</a> spec
- argument.  You can also pass it as the <code>handler</code> argument to <a href="index.html#on">on</a> for
+ argument.   You can also pass it as the <code>handler</code> argument to <a href="index.html#on">on</a> for
  options you want to add manually without putting them in the
  <a href="index.html#OptionParser">OptionParser</a> spec.</p>
 
@@ -290,8 +299,11 @@ Please report bugs at bug-list@yourhost.com
          index of last processed element of <em>arglist</em>
         </li>
         <li><span class="parameter">value</span>
-         either a function to process the option
-   argument, or a default value if encountered without an optarg
+
+<p> either a function to process the option</p>
+<pre><code>argument, or a default value if encountered without an optarg
+</code></pre>
+
          (<em>default</em> true)
         </li>
     </ul>
@@ -307,7 +319,7 @@ Please report bugs at bug-list@yourhost.com
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">parser:on (<span class="string">"--enable-nls"</span>, parser.option, parser.boolean)</pre>
+        <pre class="example">parser:on(<span class="string">'--enable-nls'</span>, parser.option, parser.boolean)</pre>
     </ul>
 
 </dd>
@@ -328,17 +340,17 @@ Please report bugs at bug-list@yourhost.com
 <p> Normally the value stored in the <code>opt</code> table by this handler will be
  the string given as the argument to that option on the command line.
  However, if the option is given on the command-line multiple times,
- <code>opt["name"]</code> will end up with all those arguments stored in the
+ <code>opt['name']</code> will end up with all those arguments stored in the
  array part of a table:</p>
 
-<pre><code> $ cat ./prog
- ...
- parser:on ({"-e", "-exec"}, required)
- _G.arg, _G.opt = parser:parse (_G.arg)
- print (tostring (_G.opt.exec))
- ...
- $ ./prog -e '(foo bar)' -e '(foo baz)' -- qux
- {1=(foo bar),2=(foo baz)}
+<pre><code>   $ cat ./prog
+   ...
+   parser:on({'-e', '-exec'}, required)
+   _G.arg, _G.opt = parser:parse(_G.arg)
+   print(tostring(_G.opt.exec))
+   ...
+   $ ./prog -e '(foo bar)' -e '(foo baz)' -- qux
+   {1=(foo bar),2=(foo baz)}
 </code></pre>
 
 
@@ -354,8 +366,11 @@ Please report bugs at bug-list@yourhost.com
          index of last processed element of <em>arglist</em>
         </li>
         <li><span class="parameter">value</span>
-         either a function to process the option argument,
-   or a forced value to replace the user's option argument.
+
+<p> either a function to process the option argument,</p>
+<pre><code>or a forced value to replace the user's option argument.
+</code></pre>
+
          (<em>optional</em>)
         </li>
     </ul>
@@ -371,7 +386,7 @@ Please report bugs at bug-list@yourhost.com
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">parser:on ({<span class="string">"-o"</span>, <span class="string">"--output"</span>}, parser.required)</pre>
+        <pre class="example">parser:on({<span class="string">'-o'</span>, <span class="string">'--output'</span>}, parser.required)</pre>
     </ul>
 
 </dd>
@@ -383,7 +398,7 @@ Please report bugs at bug-list@yourhost.com
     Finish option processing</p>
 
 <p> This is the handler automatically assigned to the option written as
- <code>--</code> in the <a href="index.html#OptionParser">OptionParser</a> spec argument.   You can also pass it as
+ <code>--</code> in the <a href="index.html#OptionParser">OptionParser</a> spec argument.    You can also pass it as
  the <code>handler</code> argument to <a href="index.html#on">on</a> if you want to manually add an end
  of options marker without writing it in the <a href="index.html#OptionParser">OptionParser</a> spec.</p>
 
@@ -415,7 +430,7 @@ Please report bugs at bug-list@yourhost.com
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">parser:on (<span class="string">"--"</span>, parser.finished)</pre>
+        <pre class="example">parser:on(<span class="string">'--'</span>, parser.finished)</pre>
     </ul>
 
 </dd>
@@ -434,7 +449,7 @@ Please report bugs at bug-list@yourhost.com
 
 <p> Beware that, <em>unlike</em> <a href="index.html#required">required</a>, this handler will store multiple
  occurrences of a command-line option as a table <strong>only</strong> when given a
- <code>value</code> function.  Automatically assigned handlers do not do this, so
+ <code>value</code> function.   Automatically assigned handlers do not do this, so
  the option will simply be <code>true</code> if the option was given one or more
  times on the command-line.
 
@@ -450,8 +465,11 @@ Please report bugs at bug-list@yourhost.com
          index of last processed element of <em>arglist</em>
         </li>
         <li><span class="parameter">value</span>
-         either a function to process the option argument,
-   or a value to store when this flag is encountered
+
+<p> either a function to process the option argument,</p>
+<pre><code>or a value to store when this flag is encountered
+</code></pre>
+
          (<em>optional</em>)
         </li>
     </ul>
@@ -467,7 +485,7 @@ Please report bugs at bug-list@yourhost.com
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">parser:on ({<span class="string">"--long-opt"</span>, <span class="string">"-x"</span>}, parser.flag)</pre>
+        <pre class="example">parser:on({<span class="string">'--long-opt'</span>, <span class="string">'-x'</span>}, parser.flag)</pre>
     </ul>
 
 </dd>
@@ -488,7 +506,7 @@ Please report bugs at bug-list@yourhost.com
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">parser:on (<span class="string">"-?"</span>, parser.version)</pre>
+        <pre class="example">parser:on(<span class="string">'-?'</span>, parser.version)</pre>
     </ul>
 
 </dd>
@@ -509,20 +527,20 @@ Please report bugs at bug-list@yourhost.com
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">parser:on (<span class="string">"-V"</span>, parser.version)</pre>
+        <pre class="example">parser:on(<span class="string">'-V'</span>, parser.version)</pre>
     </ul>
 
 </dd>
     <dt>
     <a name = "boolean"></a>
-    <strong>boolean (opt[, optarg="1"])</strong>
+    <strong>boolean (opt[, optarg='1'])</strong>
     </dt>
     <dd>
     Return a Lua boolean equivalent of various <em>optarg</em> strings.
  Report an option parse error if <em>optarg</em> is not recognised.</p>
 
 <p> Pass this as the <code>value</code> function to <a href="index.html#on">on</a> when you want various
- "truthy" or "falsey" option arguments to be coerced to a Lua <code>true</code>
+ 'truthy' or 'falsey' option arguments to be coerced to a Lua <code>true</code>
  or <code>false</code> respectively in the options table.
 
 
@@ -535,7 +553,7 @@ Please report bugs at bug-list@yourhost.com
         <li><span class="parameter">optarg</span>
             <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.4">string</a></span>
          option argument, must be a key in <a href="index.html#boolvals">boolvals</a>
-         (<em>default</em> "1")
+         (<em>default</em> '1')
         </li>
     </ul>
 
@@ -550,7 +568,7 @@ Please report bugs at bug-list@yourhost.com
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">parser:on (<span class="string">"--enable-nls"</span>, parser.optional, parser.boolean)</pre>
+        <pre class="example">parser:on(<span class="string">'--enable-nls'</span>, parser.optional, parser.boolean)</pre>
     </ul>
 
 </dd>
@@ -589,7 +607,7 @@ Please report bugs at bug-list@yourhost.com
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">parser:on (<span class="string">"--config-file"</span>, parser.required, parser.file)</pre>
+        <pre class="example">parser:on(<span class="string">'--config-file'</span>, parser.required, parser.file)</pre>
     </ul>
 
 </dd>
@@ -662,12 +680,12 @@ Please report bugs at bug-list@yourhost.com
 <p> When the automatically assigned option handlers don't do everything
  you require, or when you don't want to put an option into the
  <a href="index.html#OptionParser">OptionParser</a> <code>spec</code> argument, use this function to specify custom
- behaviour.  If you write the option into the <code>spec</code> argument anyway,
+ behaviour.   If you write the option into the <code>spec</code> argument anyway,
  calling this function will replace the automatically assigned handler
  with your own.</p>
 
 <p> When writing your own handlers for <a href="index.html#on">optparse:on</a>, you only need
- to deal with normalised arguments, because combined short arguments
+ to deal with expanded arguments, because combined short arguments
  (<code>-xyz</code>), equals separators to long options (<code>--long=ARG</code>) are fully
  expanded before any handler is called.
 
@@ -680,8 +698,11 @@ Please report bugs at bug-list@yourhost.com
         </li>
         <li><span class="parameter">handler</span>
             <span class="types"><a class="type" href="index.html#on">on_handler</a></span>
-         function to call when any of <em>opts</em> is
-   encountered
+
+<p> function to call when any of <em>opts</em> is</p>
+<pre><code>encountered
+</code></pre>
+
         </li>
         <li><span class="parameter">value</span>
          additional value passed to <a href="index.html#on_handler">on_handler</a>
@@ -694,7 +715,7 @@ Please report bugs at bug-list@yourhost.com
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><span class="comment">-- Don't process any arguments after `--`
-</span>parser:on (<span class="string">'--'</span>, parser.finished)</pre>
+</span>parser:on(<span class="string">'--'</span>, parser.finished)</pre>
     </ul>
 
 </dd>
@@ -742,7 +763,7 @@ Please report bugs at bug-list@yourhost.com
 
 <p> Read the documented options from <em>spec</em> and return custom parser that
  can be used for parsing the options described in <em>spec</em> from a run-time
- argument list.  Options in <em>spec</em> are recognised as lines that begin
+ argument list.   Options in <em>spec</em> are recognised as lines that begin
  with at least two spaces, followed by a hyphen.
 
 
@@ -765,7 +786,7 @@ Please report bugs at bug-list@yourhost.com
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example">customparser = optparse (optparse_spec)</pre>
+        <pre class="example">customparser = optparse(optparse_spec)</pre>
     </ul>
 
 </dd>
@@ -820,31 +841,31 @@ Please report bugs at bug-list@yourhost.com
     </dt>
     <dd>
     Parsed options table, with a key for each encountered option, each
- with value set by that option's <a href="index.html#on_handler">on_handler</a>.   Where an option
+ with value set by that option's <a href="index.html#on_handler">on_handler</a>.    Where an option
  has one or more long-options specified, the key will be the first
  one of those with leading hyphens stripped and non-alphanumeric
- characters replaced with underscores.  For options that can only be
+ characters replaced with underscores.   For options that can only be
  specified by a short option, the key will be the letter of the first
  of the specified short options:</p>
 
-<pre><code> {"-e", "--eval-file"} =&gt; opts.eval_file
- {"-n", "--dryrun", "--dry-run"} =&gt; opts.dryrun
- {"-t", "-T"} =&gt; opts.t
+<pre><code>   {'-e', '--eval-file'} =&gt; opts.eval_file
+   {'-n', '--dryrun', '--dry-run'} =&gt; opts.dryrun
+   {'-t', '-T'} =&gt; opts.t
 </code></pre>
 
 <p> Generally there will be one key for each previously specified
  option (either automatically assigned by <a href="index.html#OptionParser">OptionParser</a> or
  added manually with <a href="index.html#on">on</a>) containing the value(s) assigned by the
- associated <a href="index.html#on_handler">on_handler</a>.  For automatically assigned handlers,
+ associated <a href="index.html#on_handler">on_handler</a>.   For automatically assigned handlers,
  that means <code>true</code> for straight-forward flags and
  optional-argument options for which no argument was given; or else
  the string value of the argument passed with an option given only
  once; or a table of string values of the same for arguments given
  multiple times.</p>
 
-<pre><code> ./prog -x -n -x =&gt; opts = { x = true, dryrun = true }
- ./prog -e '(foo bar)' -e '(foo baz)'
-     =&gt; opts = {eval_file = {"(foo bar)", "(foo baz)"} }
+<pre><code>   ./prog -x -n -x =&gt; opts = {x=true, dryrun=true}
+   ./prog -e '(foo bar)' -e '(foo baz)'
+         =&gt; opts = {eval_file={'(foo bar)', '(foo baz)'}}
 </code></pre>
 
 <p> If you write your own handlers, or otherwise specify custom
@@ -905,15 +926,18 @@ Please report bugs at bug-list@yourhost.com
     <ol>
 
            <span class="types"><a class="type" href="https://www.lua.org/manual/5.2/manual.html#6.5">table</a> or <span class="type">nil</span></span>
-        the submodule that was loaded to satisfy the missing
-   <code>name</code>, otherwise <code>nil</code> if nothing was found
+
+<p>the submodule that was loaded to satisfy the missing</p>
+<pre><code>`name`, otherwise `nil` if nothing was found
+</code></pre>
+
     </ol>
 
 
 
     <h3>Usage:</h3>
     <ul>
-        <pre class="example"><span class="keyword">local</span> optparse = <span class="global">require</span> <span class="string">"optparse"</span>
+        <pre class="example"><span class="keyword">local</span> optparse = <span class="global">require</span> <span class="string">'optparse'</span>
 <span class="keyword">local</span> version = optparse.version</pre>
     </ul>
 
@@ -925,7 +949,7 @@ Please report bugs at bug-list@yourhost.com
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
-<i style="float:right;">Last updated 2017-06-03 17:46:54 </i>
+<i style="float:right;">Last updated 2017-12-17 19:22:14 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
