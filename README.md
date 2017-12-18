@@ -5,6 +5,7 @@ Copyright (C) 2014-2017 [Gary V. Vaughan][github]
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://mit-license.org)
 [![travis-ci status](https://secure.travis-ci.org/gvvaughan/optparse.png?branch=master)](http://travis-ci.org/gvvaughan/optparse/builds)
+[![codecov.io](https://codecov.io/gh/gvvaughan/optparse/branch/master/graph/badge.svg)](https://codecov.io/gh/gvvaughan/optparse)
 [![Stories in Ready](https://badge.waffle.io/gvvaughan/optparse.png?label=ready&title=Ready)](https://waffle.io/gvvaughan/optparse)
 
 In the common case, you can write the long-form help output typical of
