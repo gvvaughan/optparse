@@ -1,7 +1,7 @@
 Parse and Process Command Line Options
 ======================================
 
-Copyright (C) 2014-2017 [Gary V. Vaughan][github]
+Copyright (C) 2014-2018 [Gary V. Vaughan][github]
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://mit-license.org)
 [![travis-ci status](https://secure.travis-ci.org/gvvaughan/optparse.png?branch=master)](http://travis-ci.org/gvvaughan/optparse/builds)
@@ -59,7 +59,7 @@ The optparse package returns a parser factory when loaded:
     local help = [[
     parseme (optparse spec) 0α1
 
-    Copyright © 2017 Gary V. Vaughan
+    Copyright © 2018 Gary V. Vaughan
     This test program comes with ABSOLUTELY NO WARRANTY.
 
     Usage: parseme [<options>] <file>...

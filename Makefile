@@ -1,3 +1,6 @@
+# Simple Command Line Option Parsing for Lua 5.1, 5.2 & 5.3
+# Copyright (C) 2014-2018 Gary V. Vaughan
+
 LDOC	= ldoc
 LUA	= lua
 MKDIR	= mkdir -p
@@ -21,7 +24,7 @@ $(luadir)/version.lua: .FORCE
 	if cmp -s '$@' '$@T'; then						\
 	    rm -f '$@T';							\
 	else									\
-	    echo "echo 'Parse Command-Line Options / $(VERSION)' > $@";		\
+	    echo "echo return 'Parse Command-Line Options / $(VERSION)' > $@";	\
 	    mv '$@T' '$@';							\
 	fi
 

@@ -1,3 +1,7 @@
+--[[
+ Simple Command Line Option Parsing for Lua 5.1, 5.2 & 5.3
+ Copyright (C) 2014-2018 Gary V. Vaughan
+]]
 --[[--
  Parse and process command line options.
 
