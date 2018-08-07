@@ -2,6 +2,10 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+### Bug fixes
+
+  - don't hang when option description text contains a '-' character.
+
 
 ## Noteworthy changes in release 1.3 (2017-12-17) [stable]
 

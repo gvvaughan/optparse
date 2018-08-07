@@ -33,6 +33,7 @@ specify optparse:
       -b                       a short option with no long option
           --long               a long option with no short option
           --another-long       a long option with internal hypen
+          --hyphenated         hyphenated-option is hyphenated
           --true               a Lua keyword as an option name
           --boolean            an optparse handler as an option name
           --really-long-option-name

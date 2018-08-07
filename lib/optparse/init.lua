@@ -603,7 +603,7 @@ local function _init(self, spec)
       local options, spec, handler = {}, spec .. ' '
 
       -- Loop around each '-' prefixed option on this line.
-      while match(spec, '%-[%-%w]') do
+      while match(spec, '^%-[%-%w]') do
 
          -- Capture end of options processing marker.
          if match(spec, '^%-%-,?%s') then
