@@ -2,6 +2,10 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+### New Features
+
+  - Initial support for Lua 5.4.
+
 ### Bug fixes
 
   - don't hang when option description text contains a '-' character.

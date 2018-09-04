@@ -1,5 +1,5 @@
 --[[
- Simple Command Line Option Parsing for Lua 5.1, 5.2 & 5.3
+ Simple Command Line Option Parsing for Lua 5.1, 5.2, 5.3 & 5.4
  Copyright (C) 2014-2018 Gary V. Vaughan
 ]]
 
@@ -17,7 +17,7 @@ package.path = std.package.normalize('./lib/?.lua', './lib/?/init.lua', package.
 local LUA = os.getenv 'LUA' or 'lua'
 
 
--- Allow use of bare 'unpack' even in Lua 5.3.
+-- Allow use of bare 'unpack' even in Lua > 5.2.
 unpack = table.unpack or unpack
 
 

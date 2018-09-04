@@ -18,7 +18,7 @@ custom handlers to options that are not handled quite the way you'd
 like.
 
 This is a pure Lua library compatible with [LuaJIT][], [Lua][] 5.1,
-5.2 and 5.3.
+5.2, 5.3 and 5.4.
 
 [github]: http://github.com/gvvaughan/optparse/ "Github repository"
 [lua]: http://www.lua.org "The Lua Project"

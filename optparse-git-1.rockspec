@@ -13,27 +13,15 @@ description = {
    license = 'MIT/X11',
 }
 
-source = (function(gitp)
-   if gitp then
-      return {
-         url = 'git://github.com/gvvaughan/optparse.git',
-      }
-   else
-      return {
-         url = 'http://github.com/gvvaughan/optparse/archive/v' .. _MODREV .. '.zip',
-         dir = 'optparse-' .. _MODREV,
-      }
-   end
-end)(_MODREV == 'git')
-
-dependencies = {
-   'lua >= 5.1, < 5.4',
-   'std.normalize > 2.0',
+source = {
+   url = 'http://github.com/gvvaughan/optparse/archive/v' .. _MODREV .. '.zip',
+   dir = 'optparse-' .. _MODREV,
 }
 
-if _MODREV == 'git' then
-  dependencies[#dependencies + 1] = 'ldoc'
-end
+dependencies = {
+   'lua >= 5.1, < 5.5',
+   'std.normalize > 2.0',
+}
 
 build = {
    type = 'builtin',
@@ -41,4 +29,13 @@ build = {
       optparse			= 'lib/optparse/init.lua',
       ['optparse.version']	= 'lib/optparse/version.lua',
    },
+   copy_directories = {'doc'},
 }
+
+if _MODREV == 'git' then
+   build.copy_directories = nil
+
+   source = {
+      url = 'git://github.com/gvvaughan/optparse.git',
+   }
+end

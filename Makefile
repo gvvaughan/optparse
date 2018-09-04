@@ -1,4 +1,4 @@
-# Simple Command Line Option Parsing for Lua 5.1, 5.2 & 5.3
+# Simple Command Line Option Parsing for Lua 5.1, 5.2, 5.3 & 5.4
 # Copyright (C) 2014-2018 Gary V. Vaughan
 
 LDOC	= ldoc
@@ -16,7 +16,7 @@ SOURCES =				\
 	$(NOTHING_ELSE)
 
 
-all: doc $(luadir)/version.lua
+all: $(luadir)/version.lua
 
 
 $(luadir)/version.lua: .FORCE
