@@ -18,17 +18,29 @@
 ]]
 
 
-local _ENV = require 'std.normalize' {
-   'io.open',
-   'io.stderr',
-   'os.exit',
-   'string.find',
-   'string.gsub',
-   'string.lower',
-   'string.match',
-   'string.sub',
-   'table.merge',
+local _ENV = require 'optparse._strict' {
+   assert = assert,
+   error = error,
+   exit = os.exit,
+   find = string.find,
+   getmetatable = getmetatable,
+   gsub = string.gsub,
+   insert = table.insert,
+   ipairs = ipairs,
+   lower = string.lower,
+   match = string.match,
+   next = next,
    nonempty = next,
+   open = io.open,
+   pcall = pcall,
+   print = print,
+   rawset = rawset,
+   require = require,
+   setmetatable = setmetatable,
+   stderr = io.stderr,
+   sub = string.sub,
+   tostring = tostring,
+   type = type,
 }
 
 
@@ -38,8 +50,52 @@ local _ENV = require 'std.normalize' {
 --[[ ================= ]]--
 
 
-local function append(r, x)
-   r[#r + 1] = x
+local function iscallable(x)
+   return type((getmetatable(x) or {}).__call or x) == 'function'
+end
+
+
+local function getmetamethod(x, n)
+   local m = (getmetatable(x) or {})[tostring(n)]
+   if iscallable(m) then
+      return m
+   end
+end
+
+
+local function rawlen(x)
+   if type(x) ~= 'table' then
+      return #x
+   end
+
+   local n = #x
+   for i = 1, n do
+      if x[i] == nil then
+         return i - 1
+      end
+   end
+   return n
+end
+
+
+local function len(x)
+   local m = getmetamethod(x, '__len')
+   if m then
+      return m(x)
+   end
+   if getmetamethod(x, '__tostring') then
+      x = tostring(x)
+   end
+   return rawlen(x)
+end
+
+
+local function merge(t, r)
+   r = r or {}
+   for k, v in next, t do
+      r[k] = r[k] or v
+   end
+   return r
 end
 
 
@@ -47,11 +103,6 @@ local function extend(r, items)
    for i = 1, len(items) do
       r[#r + 1] = items[i]
    end
-end
-
-
-local function iscallable(x)
-   return type((getmetatable(x) or {}).__call or x) == 'function'
 end
 
 
@@ -93,14 +144,14 @@ local function expandargs(self, arglist)
 
          if x == nil then
             -- No '=', or substring before '=' is not a known option name.
-            append(r, opt)
+            insert(r, opt)
          end
 
       elseif sub(opt, 1, 1) == '-' and len(opt) > 2 then
          local orig, split, rest = opt, {}
          repeat
             opt, rest = match(opt, '^(%-%S)(.*)$')
-            append(split, opt)
+            insert(split, opt)
 
             -- If there's no handler, the option was a typo, or not supposed
             -- to be an option at all.
@@ -118,7 +169,7 @@ local function expandargs(self, arglist)
 
             -- Split '-xshortargument' into '-x shortargument'.
             else
-               append(split, rest)
+               insert(split, rest)
                opt = nil
             end
          until opt == nil
@@ -126,7 +177,7 @@ local function expandargs(self, arglist)
          -- Append split options to expanded list
          extend(r, split)
       else
-         append(r, opt)
+         insert(r, opt)
       end
    end
 
@@ -145,7 +196,7 @@ local function set(self, opt, value)
    local opts = self.opts[key]
 
    if type(opts) == 'table' then
-      append(opts, value)
+      insert(opts, value)
    elseif opts ~= nil then
       self.opts[key] = {opts, value}
    else
@@ -262,7 +313,7 @@ end
 -- parser:on('--', parser.finished)
 local function finished(self, arglist, i)
    for opt = i + 1, len(arglist) do
-      append(self.unrecognised, arglist[opt])
+      insert(self.unrecognised, arglist[opt])
    end
    return 1 + len(arglist)
 end
@@ -475,10 +526,10 @@ local function on(self, opts, handler, value)
          if match(opt, '^%-[^%-]+') then
             -- '-xyz' => '-x -y -z'
             for i = 2, len(opt) do
-               append(args, '-' .. sub(opt, i, i))
+               insert(args, '-' .. sub(opt, i, i))
             end
          else
-            append(args, opt)
+            insert(args, opt)
          end
       end)
    end
@@ -542,12 +593,12 @@ local function parse(self, arglist, defaults)
       local opt = arglist[i]
 
       if self[opt] == nil or match(opt, '^[^%-]') then
-         append(self.unrecognised, opt)
+         insert(self.unrecognised, opt)
          i = i + 1
 
          -- Following non-'-' prefixed argument is an optarg.
          if i <= len(arglist) and match(arglist[i], '^[^%-]') then
-            append(self.unrecognised, arglist[i])
+            insert(self.unrecognised, arglist[i])
             i = i + 1
          end
 
@@ -593,7 +644,7 @@ local function _init(self, spec)
    -- by a '-'.
    local specs = {}
    gsub(parser.helptext, '\n  %s*(%-[^\n]+)', function(spec)
-      append(specs, spec)
+      insert(specs, spec)
    end)
 
    -- Register option handlers according to the help text.
@@ -632,7 +683,7 @@ local function _init(self, spec)
             if opt == '-' then
               opt = '--'
             end
-            append(options, opt)
+            insert(options, opt)
             spec = rest
          end)
 
@@ -641,7 +692,7 @@ local function _init(self, spec)
          if c == 0 then
             -- Consume long option.
             gsub(spec, '^%-%-([%-%w]+),?%s+(.*)$', function(opt, rest)
-               append(options, opt)
+               insert(options, opt)
                spec = rest
             end)
          end

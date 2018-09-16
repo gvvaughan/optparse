@@ -20,13 +20,13 @@ source = {
 
 dependencies = {
    'lua >= 5.1, < 5.5',
-   'std.normalize > 2.0',
 }
 
 build = {
    type = 'builtin',
    modules = {
       optparse			= 'lib/optparse/init.lua',
+      ['optparse._strict']	= 'lib/optparse/_strict.lua',
       ['optparse.version']	= 'lib/optparse/version.lua',
    },
    copy_directories = {'doc'},

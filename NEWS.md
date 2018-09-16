@@ -6,21 +6,26 @@
 
   - Initial support for Lua 5.4.
 
+  - No need to preinstall `std._debug` and `std.normalize` for deployment,
+    of course without runtime checking.  In development environments,
+    installed `std._debug`, `std.strict` will be loaded and used for
+    runtime checks as before.
+
 ### Bug fixes
 
-  - don't hang when option description text contains a '-' character.
+  - Don't hang when option description text contains a '-' character.
 
 
 ## Noteworthy changes in release 1.3 (2017-12-17) [stable]
 
 ### Bug fixes
 
-  - don't hang when help text has a bare '-' as the first non-whitespace
+  - Don't hang when help text has a bare '-' as the first non-whitespace
     character on the line.
 
 ### Incompatible changes
 
-  - the implementation now depends upon and requires the luarocks modules
+  - The implementation now depends upon and requires the luarocks modules
     `std.normalize` and `std._debug`.
 
 
@@ -28,10 +33,10 @@
 
 ### Bug fixes
 
-  - don't crash when first unrecognized argument is also a handler
+  - Don't crash when first unrecognized argument is also a handler
     name (boolean, file, finished, flag, etc...)
 
-  - don't hang when help text option table formats long option name
+  - Don't hang when help text option table formats long option name
     on its own line before indented description.
 
 
