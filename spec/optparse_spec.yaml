@@ -500,14 +500,3 @@ specify optparse:
     - it stops separating at an optional argument option:
         expect (parseargs ([[{"x", "this"}, parser.optional]], {"-bxbit"})).
            to_output "opts = { b = true, this = bit }\n"
-
-
-- describe version:
-  - it returns a string:
-      expect (type (M.version)).to_be "string"
-  - it contains package description:
-      expect (string.match (M.version, "^(.*)/")).
-         to_be "Parse Command-Line Options "
-  - it ends with a semantic version number:
-      expect (string.match (M.version, "([%.%d]+)%D*$")).
-         not_to_be (nil)
