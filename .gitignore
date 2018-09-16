@@ -3,5 +3,6 @@
 /*.src.rock
 /build-aux/config.ld
 /doc/*
+/lib/optparse/version.lua
 /luacov.*.out
 /optparse-*.tar.gz
