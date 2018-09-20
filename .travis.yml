@@ -22,9 +22,9 @@ before_install:
 
 install:
   - luarocks --lua-dir=$PWD/tools --tree=$PWD/tools install ldoc
-  - luarocks --lua-dir=$PWD/tools --tree=$PWD/tools install ansicolors
-  - luarocks --lua-dir=$PWD/tools --tree=$PWD/tools install specl
   - luarocks --lua-dir=$PWD/tools --tree=$PWD/tools install luacov
+  - luarocks install ansicolors
+  - luarocks install specl
 
 script:
   - make all doc
