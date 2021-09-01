@@ -360,7 +360,7 @@ end
 -- @static
 -- @function help
 -- @usage
--- parser:on('-?', parser.version)
+-- parser:on('-?', parser.help)
 local function help(self)
    print(self.helptext)
    exit(0)
