@@ -1,7 +1,7 @@
 Parse and Process Command Line Options
 ======================================
 
-Copyright (C) 2014-2018, 2021 [Gary V. Vaughan][github]
+Copyright (C) 2014-2018, 2021-2022 [Gary V. Vaughan][github]
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://mit-license.org)
 [![travis-ci status](https://secure.travis-ci.org/gvvaughan/optparse.png?branch=master)](http://travis-ci.org/gvvaughan/optparse/builds)
