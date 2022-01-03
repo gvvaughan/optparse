@@ -4,7 +4,7 @@ Parse and Process Command Line Options
 Copyright (C) 2014-2018, 2021-2022 [Gary V. Vaughan][github]
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://mit-license.org)
-[![travis-ci status](https://secure.travis-ci.org/gvvaughan/optparse.png?branch=master)](http://travis-ci.org/gvvaughan/optparse/builds)
+[![workflow status](https://github.com/gvvaughan/optparse/actions/workflows/spec.yml/badge.svg?branch=master)](https://github.com/gvvaughan/optparse/actions)
 [![codecov.io](https://codecov.io/gh/gvvaughan/optparse/branch/master/graph/badge.svg)](https://codecov.io/gh/gvvaughan/optparse)
 
 In the common case, you can write the long-form help output typical of
