@@ -230,7 +230,7 @@ end
 --    argument, or a default value if encountered without an optarg
 -- @treturn int index of next element of *arglist* to process
 -- @usage
--- parser:on('--enable-nls', parser.option, parser.boolean)
+-- parser:on('--enable-nls', parser.optional, parser.boolean)
 function optional(self, arglist, i, value)
    if i + 1 <= len(arglist) and sub(arglist[i + 1], 1, 1) ~= '-' then
       return self:required(arglist, i, value)
