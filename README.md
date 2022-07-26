@@ -19,9 +19,9 @@ like.
 This is a pure Lua library compatible with [LuaJIT][], [Lua][] 5.1,
 5.2, 5.3 and 5.4.
 
-[github]: http://github.com/gvvaughan/optparse/ "Github repository"
-[lua]: http://www.lua.org "The Lua Project"
-[luajit]: http://luajit.org "The LuaJIT Project"
+[github]: https://github.com/gvvaughan/optparse/ "Github repository"
+[lua]: https://www.lua.org "The Lua Project"
+[luajit]: https://luajit.org "The LuaJIT Project"
 
 
 Installation
@@ -31,20 +31,20 @@ The simplest and best way to install optparse is with [LuaRocks][]. To
 install the latest release (recommended):
 
 ```bash
-    luarocks install optparse
+luarocks install optparse
 ```
 
 To install current git master (for testing, before submitting a bug
 report for example):
 
 ```bash
-    luarocks install http://raw.githubusercontent.com/gvvaughan/optparse/master/optparse-git-1.rockspec
+luarocks install http://raw.githubusercontent.com/gvvaughan/optparse/master/optparse-git-1.rockspec
 ```
 
 The best way to install without [LuaRocks][] is to copy the
 `optparse.lua` file into a directory in your package search path.
 
-[luarocks]: http://www.luarocks.org "Lua package manager"
+[luarocks]: https://www.luarocks.org "Lua package manager"
 
 
 Use
@@ -53,41 +53,41 @@ Use
 The optparse package returns a parser factory when loaded:
 
 ```lua
-    local OptionParser = require "optparse"
+local OptionParser = require "optparse"
 
-    local help = [[
-    parseme (optparse spec) 0α1
+local help = [[
+parseme (optparse spec) 0α1
 
-    Copyright © 2018 Gary V. Vaughan
-    This test program comes with ABSOLUTELY NO WARRANTY.
+Copyright © 2018 Gary V. Vaughan
+This test program comes with ABSOLUTELY NO WARRANTY.
 
-    Usage: parseme [<options>] <file>...
+Usage: parseme [<options>] <file>...
 
-    Banner text.
+Banner text.
 
-    Long description.
+Long description.
 
-    Options:
+Options:
 
-      -h, --help               display this help, then exit
-          --version            display version information, then exit
-      -b                       a short option with no long option
-          --long               a long option with no short option
-          --another-long       a long option with internal hypen
-          --true               a Lua keyword as an option name
-      -v, --verbose            a combined short and long option
-      -n, --dryrun, --dry-run  several spellings of the same option
-      -u, --name=USER          require an argument
-      -o, --output=[FILE]      accept an optional argument
-      --                       end of options
+  -h, --help               display this help, then exit
+      --version            display version information, then exit
+  -b                       a short option with no long option
+      --long               a long option with no short option
+      --another-long       a long option with internal hypen
+      --true               a Lua keyword as an option name
+  -v, --verbose            a combined short and long option
+  -n, --dryrun, --dry-run  several spellings of the same option
+  -u, --name=USER          require an argument
+  -o, --output=[FILE]      accept an optional argument
+  --                       end of options
 
-    Footer text.
+Footer text.
 
-    Please report bugs at <http://github.com/gvvaughan/optparse/issues>.
-    ]]
+Please report bugs at <http://github.com/gvvaughan/optparse/issues>.
+]]
 
-    local parser = OptionParser (help)
-    local arg, opts = parser:parse (_G.arg)
+local parser = OptionParser (help)
+local arg, opts = parser:parse (_G.arg)
 ```
 
 
@@ -96,10 +96,10 @@ Documentation
 -------------
 
 The latest release is [documented with LDoc][github.io].
-Pre-built HTML files are included in the [release tarball][].
+Pre-built HTML files are included in the [release][] tarball.
 
-[github.io]: http://gvvaughan.github.io/optparse
-[release]: http://gvvaughan.github.io/optparse/releases
+[github.io]: https://gvvaughan.github.io/optparse
+[release]: https://github.com/gvvaughan/optparse/releases
 
 
 Bug reports and code contributions
@@ -134,4 +134,4 @@ points when proposing changes:
 5. Prefer explicit string function calls over object methods, to mitigate
    issues with monkey-patching in caller environment.
 
-[issues]: http://github.com/gvvaughan/optparse/issues
+[issues]: https://github.com/gvvaughan/optparse/issues
