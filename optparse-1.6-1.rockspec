@@ -1,4 +1,4 @@
-local _MODREV, _SPECREV = 'git', '-1'
+local _MODREV, _SPECREV = '1.6', '-1'
 
 package = 'optparse'
 version = _MODREV .. _SPECREV
