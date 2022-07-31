@@ -2,6 +2,9 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+
+## Noteworthy changes in release 1.5 (2022-07-30) [stable]
+
 ### Bug fixes
 
   - The parser no longer shadows the internal `optparse.version`
