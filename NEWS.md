@@ -2,6 +2,25 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+### Bug fixes
+
+  - The parser no longer shadows the internal `optparse.version`
+    `on_handler` by also saving the last word of the parsed
+    `versiontext` into `optparse.version`.
+
+    But, we don't want to break existing clients that use the content
+    of the saved `optparse.version` string either.  Since the
+    `on_handler` was never available to callers before due to being
+    shadowed, rename it to `optparse.showversion`.
+
+### Incompatible changes
+
+  - For consistency with the renaming of `optparse.showversion`,
+    similarly rename `optparse.help` to `optparse.showhelp`.  For
+    backwards compatibility, `optparse.help` continues to be available
+    too, but is now undocumented.  Consider using the `showhelp` in
+    your projects, especially if you also start using `showversion`.
+
 
 ## Noteworthy changes in release 1.4 (2018-09-16) [stable]
 

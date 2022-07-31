@@ -358,10 +358,10 @@ end
 -- This is the handler automatically assigned tooptions that have
 -- `--help` in the specification, e.g. `-h, -?, --help`.
 -- @static
--- @function help
+-- @function showhelp
 -- @usage
--- parser:on('-?', parser.help)
-local function help(self)
+-- parser:on('-?', parser.showhelp)
+local function showhelp(self)
    print(self.helptext)
    exit(0)
 end
@@ -372,10 +372,10 @@ end
 -- This is the handler automatically assigned tooptions that have
 -- `--version` in the specification, e.g. `-V, --version`.
 -- @static
--- @function version
+-- @function showversion
 -- @usage
--- parser:on('-V', parser.version)
-local function version(self)
+-- parser:on('-V', parser.showversion)
+local function showversion(self)
    print(self.versiontext)
    exit(0)
 end
@@ -669,10 +669,10 @@ local function _init(self, spec)
 
          -- Capture any specially handled arguments.
          elseif match(spec, '^%-%-help,?%s') then
-            handler = set_handler(handler, help)
+            handler = set_handler(handler, showhelp)
 
          elseif match(spec, '^%-%-version,?%s') then
-            handler = set_handler(handler, version)
+            handler = set_handler(handler, showversion)
          end
 
          -- Consume argument spec, now that it was processed above.
@@ -750,9 +750,9 @@ return setmetatable({
    -- @string version the last white-space delimited word on the first line
    --    of text from *spec*
    -- @string versiontext everything preceding 'Usage:' from *spec*, and
-   --    which will be displayed by the @{version} @{on_handler}
+   --    which will be displayed by the @{showversion} @{on_handler}
    -- @string helptext everything including and following 'Usage:' from
-   --    *spec* string and which will be displayed by the @{help}
+   --    *spec* string and which will be displayed by the @{showhelp}
    --    @{on_handler}
    -- @usage
    -- local optparse = require 'optparse'
@@ -814,10 +814,11 @@ return setmetatable({
          file     = file,
          finished = finished,
          flag     = flag,
-         help     = help,
+         help     = showhelp, -- undocumented, for backwards compatibility
          optional = optional,
          required = required,
-         version  = version,
+         showhelp = showhelp,
+         showversion = showversion,
 
          on       = on,
          opterr   = opterr,
