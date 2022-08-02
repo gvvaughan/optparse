@@ -15,6 +15,7 @@ SOURCES =				\
 	$(luadir)/version.lua		\
 	$(NOTHING_ELSE)
 
+.PHONY: all check clean
 
 all: $(luadir)/version.lua
 
@@ -40,5 +41,9 @@ CHECK_ENV = LUA=$(LUA)
 check: $(SOURCES)
 	LUA=$(LUA) $(SPECL) --unicode $(SPECL_OPTS) spec/*_spec.yaml
 
+clean:
+	rm -f $(luadir)/version.lua
+	rm -rf doc/
+	rm -f build-aux/config.ld
 
 .FORCE:
