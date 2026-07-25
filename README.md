@@ -1,7 +1,7 @@
 Parse and Process Command Line Options
 ======================================
 
-Copyright (C) 2014-2018, 2021-2022 [Gary V. Vaughan][github]
+Copyright (C) 2014-2018, 2021-2022, 2026 [Gary V. Vaughan][github]
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](http://mit-license.org)
 [![workflow status](https://github.com/gvvaughan/optparse/actions/workflows/spec.yml/badge.svg?branch=master)](https://github.com/gvvaughan/optparse/actions)
@@ -17,7 +17,7 @@ custom handlers to options that are not handled quite the way you'd
 like.
 
 This is a pure Lua library compatible with [LuaJIT][], [Lua][] 5.1,
-5.2, 5.3 and 5.4.
+5.2, 5.3, 5.4 and 5.5.
 
 [github]: https://github.com/gvvaughan/optparse/ "Github repository"
 [lua]: https://www.lua.org "The Lua Project"
@@ -58,7 +58,7 @@ local OptionParser = require "optparse"
 local help = [[
 parseme (optparse spec) 0α1
 
-Copyright © 2018 Gary V. Vaughan
+Copyright © 2026 Gary V. Vaughan
 This test program comes with ABSOLUTELY NO WARRANTY.
 
 Usage: parseme [<options>] <file>...

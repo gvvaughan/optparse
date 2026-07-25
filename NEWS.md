@@ -3,6 +3,13 @@
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
 
+## Noteworthy changes in release 1.6 (2026-07-25) [stable]
+
+### New Features
+
+  - Initial support for Lua 5.5.
+
+
 ## Noteworthy changes in release 1.5 (2022-07-30) [stable]
 
 ### Bug fixes
