@@ -24,12 +24,16 @@ dependencies = {
 }
 
 build = {
-   type = 'builtin',
-   modules = {
-      optparse			= 'lib/optparse/init.lua',
-      ['optparse._strict']	= 'lib/optparse/_strict.lua',
-      ['optparse.version']	= 'lib/optparse/version.lua',
-   },
+   type = 'command',
+   build_command = '$(LUA) build-aux/luke'
+      .. ' package="' .. package .. '"'
+      .. ' version="' .. _MODREV .. '"'
+      .. ' PREFIX="$(PREFIX)"'
+      .. ' LUA="$(LUA)"'
+      ,
+   install_command = '$(LUA) build-aux/luke install --quiet'
+      .. ' INST_LUADIR="$(LUADIR)"'
+      ,
    copy_directories = {'doc'},
 }
 
@@ -45,9 +49,15 @@ test = {
 }
 
 if _MODREV == 'dev' then
+   -- luarocks.org's ldoc fails on Lua 5.5; gvvaughan's works.
+   build_dependencies = {'gvvaughan/ldoc'}
+
    build.copy_directories = nil
 
    source = {
       url = 'git+https://github.com/gvvaughan/optparse.git',
    }
+else
+   -- A release commits its LDocs, so don't build them again.
+   build.build_command = build.build_command .. ' LDOC=true'
 end

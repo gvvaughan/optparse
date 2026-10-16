@@ -3,8 +3,8 @@
  Copyright (C) 2014-2018, 2021-2022, 2026 Gary V. Vaughan
 ]]
 
-title		= "optparse @PACKAGE_VERSION@ Reference"
-project		= "optparse @PACKAGE_VERSION@"
+title		= "optparse @version@ Reference"
+project		= "optparse @version@"
 description	= [[
 # Command Line Option Parsing
 
