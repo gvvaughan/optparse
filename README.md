@@ -3,9 +3,9 @@ Parse and Process Command Line Options
 
 Copyright (C) 2014-2018, 2021-2022, 2026 [Gary V. Vaughan][github]
 
-[![License](http://img.shields.io/:license-mit-blue.svg)](http://mit-license.org)
+[![License](https://img.shields.io/:license-mit-blue.svg)](https://mit-license.org)
 [![workflow status](https://github.com/gvvaughan/optparse/actions/workflows/spec.yml/badge.svg?branch=master)](https://github.com/gvvaughan/optparse/actions)
-[![codecov.io](https://codecov.io/gh/gvvaughan/optparse/branch/master/graph/badge.svg)](https://codecov.io/gh/gvvaughan/optparse)
+[![codecov.io](https://codecov.io/gh/gvvaughan/optparse/graph/badge.svg?branch=master)](https://codecov.io/gh/gvvaughan/optparse?branch=master)
 
 In the common case, you can write the long-form help output typical of
 a modern command line program, and let this module generate a custom
@@ -44,7 +44,7 @@ luarocks install https://raw.githubusercontent.com/gvvaughan/optparse/master/opt
 The best way to install without [LuaRocks][] is to copy the
 `optparse.lua` file into a directory in your package search path.
 
-[luarocks]: https://www.luarocks.org "Lua package manager"
+[luarocks]: https://luarocks.org "Lua package manager"
 
 
 Use
@@ -83,7 +83,7 @@ Options:
 
 Footer text.
 
-Please report bugs at <http://github.com/gvvaughan/optparse/issues>.
+Please report bugs at <https://github.com/gvvaughan/optparse/issues>.
 ]]
 
 local parser = OptionParser (help)
