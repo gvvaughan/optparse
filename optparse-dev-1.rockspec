@@ -1,4 +1,4 @@
-local _MODREV, _SPECREV = 'git', '-1'
+local _MODREV, _SPECREV = 'dev', '-1'
 
 package = 'optparse'
 version = _MODREV .. _SPECREV
@@ -9,12 +9,12 @@ description = {
       Automatically generate a custom command-line option parser from
       just the long-form help text for your program.
    ]],
-   homepage = 'http://gvvaughan.github.io/optparse',
+   homepage = 'https://gvvaughan.github.io/optparse',
    license = 'MIT/X11',
 }
 
 source = {
-   url = 'http://github.com/gvvaughan/optparse/archive/v' .. _MODREV .. '.zip',
+   url = 'https://github.com/gvvaughan/optparse/archive/v' .. _MODREV .. '.zip',
    dir = 'optparse-' .. _MODREV,
 }
 
@@ -32,10 +32,10 @@ build = {
    copy_directories = {'doc'},
 }
 
-if _MODREV == 'git' then
+if _MODREV == 'dev' then
    build.copy_directories = nil
 
    source = {
-      url = 'git://github.com/gvvaughan/optparse.git',
+      url = 'git+https://github.com/gvvaughan/optparse.git',
    }
 end
