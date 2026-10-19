@@ -45,7 +45,7 @@ test_dependencies = {
 
 test = {
    type = 'command',
-   command = 'specl --unicode -vfreport --coverage spec/*_spec.yaml',
+   command = 'specl -vfreport --coverage spec/*_spec.yaml',
 }
 
 if _MODREV == 'dev' then
