@@ -93,7 +93,9 @@ end
 local function merge(t, r)
    r = r or {}
    for k, v in next, t do
-      r[k] = r[k] or v
+      if r[k] == nil then
+         r[k] = v
+      end
    end
    return r
 end

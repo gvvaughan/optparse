@@ -2,6 +2,12 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+### Bug fixes
+
+  - `parse` no longer replaces an option that the command line set to
+    `false`, such as `--color=no` with `parser.boolean`, with a true
+    value from its `defaults` argument.
+
 
 ## Noteworthy changes in release 1.6 (2026-07-25) [stable]
 

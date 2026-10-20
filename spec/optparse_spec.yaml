@@ -257,6 +257,13 @@ specify optparse:
            to_equal { arg = {}, opts = { x={"t"}, y=false, z=true }}
         expect (main {"-w"}).
            to_equal { arg = {"-w"}, opts = { x={"t"}, y=false }}
+    - it prefers a supplied false to a true default: |
+        local OptionParser = require "optparse"
+        local parser = OptionParser ("program 0\nUsage: program\n" ..
+                    "      --color=WHEN  colorize\n")
+        parser:on ("color", parser.required, parser.boolean)
+        local _, opts = parser:parse ({"--color=no"}, { color=true })
+        expect (opts.color).to_be (false)
 
   - context with io.die:
     - before: |
