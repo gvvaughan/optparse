@@ -17,7 +17,7 @@ The code is copyright by its author, and released under the MIT
 license (the same license as Lua itself).  There is no warranty.
 ]]
 
-dir		= "../doc"
+dir		= "../doc/api"
 
 file		= "../lib/optparse/init.lua"
 

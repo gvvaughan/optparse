@@ -41,65 +41,21 @@ report for example):
 luarocks install https://raw.githubusercontent.com/gvvaughan/optparse/master/optparse-dev-1.rockspec
 ```
 
-The best way to install without [LuaRocks][] is to copy the
-`optparse.lua` file into a directory in your package search path.
+The best way to install without [LuaRocks][] is to copy `init.lua` and
+`_strict.lua` from `lib/optparse` into an `optparse` directory in your
+package search path.
 
 [luarocks]: https://luarocks.org "Lua package manager"
-
-
-Use
----
-
-The optparse package returns a parser factory when loaded:
-
-```lua
-local OptionParser = require "optparse"
-
-local help = [[
-parseme (optparse spec) 0α1
-
-Copyright © 2026 Gary V. Vaughan
-This test program comes with ABSOLUTELY NO WARRANTY.
-
-Usage: parseme [<options>] <file>...
-
-Banner text.
-
-Long description.
-
-Options:
-
-  -h, --help               display this help, then exit
-      --version            display version information, then exit
-  -b                       a short option with no long option
-      --long               a long option with no short option
-      --another-long       a long option with internal hypen
-      --true               a Lua keyword as an option name
-  -v, --verbose            a combined short and long option
-  -n, --dryrun, --dry-run  several spellings of the same option
-  -u, --name=USER          require an argument
-  -o, --output=[FILE]      accept an optional argument
-  --                       end of options
-
-Footer text.
-
-Please report bugs at <https://github.com/gvvaughan/optparse/issues>.
-]]
-
-local parser = OptionParser (help)
-local arg, opts = parser:parse (_G.arg)
-```
-
 
 
 Documentation
 -------------
 
-The latest release is [documented with LDoc][github.io].
-Pre-built HTML files are included in the [release][] tarball.
+optparse includes [comprehensive documentation][github.io], which is
+written in [doc/optparse.md][manual].
 
 [github.io]: https://gvvaughan.github.io/optparse
-[release]: https://github.com/gvvaughan/optparse/releases
+[manual]:    doc/optparse.md
 
 
 Bug reports and code contributions

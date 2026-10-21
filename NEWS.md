@@ -2,6 +2,12 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+### New features
+
+  - optparse has a manual, `doc/optparse.md`, which is now the home page
+    at <https://gvvaughan.github.io/optparse>.  The LDoc reference has
+    moved to <https://gvvaughan.github.io/optparse/api>.
+
 ### Bug fixes
 
   - `parse` no longer replaces an option that the command line set to
