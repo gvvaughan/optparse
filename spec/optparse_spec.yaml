@@ -265,63 +265,21 @@ specify optparse:
         local _, opts = parser:parse ({"--color=no"}, { color=true })
         expect (opts.color).to_be (false)
 
-  - context with io.die:
+  # stdlib's std.io.die and std.io.warn prefix their messages with
+  # `opts.program`, and `opts.line` if any, when the options are assigned
+  # back to `_G.opts`; stdlib's own specs check the messages themselves.
+  - context for std.io:
     - before: |
-        runscript = function (code)
-           return luaproc ([[
-              local OptionParser = require "optparse"
-              local parser = OptionParser ("program 0\nUsage: program\n")
-              _G.arg, _G.opts = parser:parse (_G.arg)
-            ]] .. code .. [[
-            require "std.io".die "By 'eck!"
-          ]])
-        end
-    - it prefers `prog.name` to `opts.program`: |
-        code = [[prog = { file = "file", name = "name" }]]
-        expect (runscript (code)).to_fail_while_matching ": name: By 'eck!\n"
-    - it prefers `prog.file` to `opts.program`: |
-        code = [[prog = { file = "file" }]]
-        expect (runscript (code)).to_fail_while_matching ": file: By 'eck!\n"
-    - it appends `prog.line` if any to `prog.file` over using `opts`: |
-        code = [[
-           prog = { file = "file", line = 125 }; opts.line = 99]]
-        expect (runscript (code)).
-           to_fail_while_matching ": file:125: By 'eck!\n"
-    - it prefixes `opts.program` if any: |
-        expect (runscript ("")).to_fail_while_matching ": program: By 'eck!\n"
-    - it appends `opts.line` if any, to `opts.program`: |
-        code = [[opts.line = 99]]
-        expect (runscript (code)).
-           to_fail_while_matching ": program:99: By 'eck!\n"
-
-  - context with io.warn:
-    - before: |
-        runscript = function (code)
-           return luaproc ([[
-              local OptionParser = require "optparse"
-              local parser = OptionParser ("program 0\nUsage: program\n")
-              _G.arg, _G.opts = parser:parse (_G.arg)
-           ]] .. code .. [[
-              require "std.io".warn "Ayup!"
-           ]])
-        end
-    - it prefers `prog.name` to `opts.program`: |
-        code = [[prog = { file = "file", name = "name" }]]
-        expect (runscript (code)).to_output_error "name: Ayup!\n"
-    - it prefers `prog.file` to `opts.program`: |
-        code = [[prog = { file = "file" }]]
-        expect (runscript (code)).to_output_error "file: Ayup!\n"
-    - it appends `prog.line` if any to `prog.file` over using `opts`: |
-        code = [[
-           prog = { file = "file", line = 125 }; opts.line = 99]]
-        expect (runscript (code)).
-           to_output_error "file:125: Ayup!\n"
-    - it prefixes `opts.program` if any: |
-        expect (runscript ("")).to_output_error "program: Ayup!\n"
-    - it appends `opts.line` if any, to `opts.program`: |
-        code = [[opts.line = 99]]
-        expect (runscript (code)).
-           to_output_error "program:99: Ayup!\n"
+        local OptionParser = require "optparse"
+        parser = OptionParser ("program 0\nUsage: myprog [<options>]\n" ..
+                    "  -v, --verbose  say more\n")
+    - it makes the program name available as `opts.program`: |
+        local _, opts = parser:parse {}
+        expect (opts.program).to_be "myprog"
+    - it does not save the program name as an option: |
+        local _, opts = parser:parse {"-v"}
+        expect (rawget (opts, "program")).to_be (nil)
+        expect (opts.verbose).to_be (true)
 
 - describe parser:on:
   - before: |
