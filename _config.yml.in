@@ -1,0 +1,11 @@
+owner:   Gary V. Vaughan
+account: gvvaughan
+
+name:         optparse
+description:  Parse and process command line options.
+forkme:       "https://github.com/gvvaughan/optparse"
+release-no:   @version@
+
+url:      "https://gvvaughan.github.io/optparse"
+markdown: kramdown
+pygments: true
