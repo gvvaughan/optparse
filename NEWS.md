@@ -2,6 +2,9 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+
+## Noteworthy changes in release 2 (2026-10-20) [stable]
+
 ### New features
 
   - optparse has a manual, `doc/optparse.md`, which is now the home page
