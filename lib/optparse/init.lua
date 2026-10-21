@@ -549,16 +549,14 @@ end
 
 ------
 -- Parsed options table, with a key for each encountered option, each
--- with value set by that option's @{on_handler}.   Where an option
--- has one or more long-options specified, the key will be the first
--- one of those with leading hyphens stripped and non-alphanumeric
--- characters replaced with underscores.   For options that can only be
--- specified by a short option, the key will be the letter of the first
--- of the specified short options:
+-- with value set by that option's @{on_handler}.   The key is the
+-- last spelling of the option, with leading hyphens stripped and
+-- non-alphanumeric characters replaced with underscores, so write the
+-- long option last:
 --
 --       {'-e', '--eval-file'} => opts.eval_file
---       {'-n', '--dryrun', '--dry-run'} => opts.dryrun
---       {'-t', '-T'} => opts.t
+--       {'-n', '--dryrun', '--dry-run'} => opts.dry_run
+--       {'-t', '-T'} => opts.T
 --
 -- Generally there will be one key for each previously specified
 -- option (either automatically assigned by @{OptionParser} or
