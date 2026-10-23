@@ -265,6 +265,15 @@ specify optparse:
         local _, opts = parser:parse ({"--color=no"}, { color=true })
         expect (opts.color).to_be (false)
 
+    - it parses an argument list with a protected metatable: |
+        local OptionParser = require "optparse"
+        local parser = OptionParser ("program 0\nUsage: program\n" ..
+                    "  -v, --verbose  say more\n")
+        local arglist = setmetatable ({"--verbose", "file"}, {__metatable = true})
+        local rest, opts = parser:parse (arglist)
+        expect (opts.verbose).to_be (true)
+        expect (rest[1]).to_be "file"
+
   # stdlib's std.io.die and std.io.warn prefix their messages with
   # `opts.program`, and `opts.line` if any, when the options are assigned
   # back to `_G.opts`; stdlib's own specs check the messages themselves.

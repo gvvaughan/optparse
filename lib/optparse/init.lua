@@ -51,14 +51,22 @@ local _ENV = require 'optparse._strict' {
 
 
 local function iscallable(x)
-   return type((getmetatable(x) or {}).__call or x) == 'function'
+   if type(x) == 'function' then
+      return true
+   end
+   -- A protected metatable, from `__metatable`, need not be a table.
+   local mt = getmetatable(x)
+   return type(mt) == 'table' and type(mt.__call) == 'function'
 end
 
 
 local function getmetamethod(x, n)
-   local m = (getmetatable(x) or {})[tostring(n)]
-   if iscallable(m) then
-      return m
+   local mt = getmetatable(x)
+   if type(mt) == 'table' then
+      local m = mt[tostring(n)]
+      if iscallable(m) then
+         return m
+      end
    end
 end
 

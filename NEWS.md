@@ -2,6 +2,11 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+### Bug fixes
+
+  - The `parse` method no longer raises an error for an argument list
+    whose `__metatable` field is not a table, such as `true`.
+
 
 ## Noteworthy changes in release 2 (2026-10-20) [stable]
 
