@@ -396,6 +396,10 @@ specify optparse:
                                 {"-x", optarg})).
                 to_output "opts = { x = false }\n"
           end
+      - it diagnoses an argument that is neither: |
+          expect (parseargs ([["x", parser.required, parser.boolean]],
+                             {"-x", "maybe"})).
+             to_contain_error "maybe: Not a valid argument to -x."
     - context with a file handler function:
       - it records an existing file:
           expect (parseargs ([["x", parser.required, parser.file]],

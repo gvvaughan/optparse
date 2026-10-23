@@ -393,7 +393,7 @@ local function boolean(self, opt, optarg)
    end
    local b = boolvals[lower(tostring(optarg))]
    if b == nil then
-      return self:opterr(optarg .. ': Not a valid argument to ' ..opt[1] .. '.')
+      return self:opterr(optarg .. ': Not a valid argument to ' .. opt .. '.')
    end
    return b
 end

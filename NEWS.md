@@ -11,6 +11,10 @@
     `parser:on('--stored', parser.flag, 'stored')`, as its documentation
     says, instead of recording nothing.  Passing `false` records `false`.
 
+  - `parser.boolean` now reports an argument that is not a boolean, such
+    as `--color=maybe`, with an error message and exit status 2, instead
+    of raising a Lua error.
+
 
 ## Noteworthy changes in release 2 (2026-10-20) [stable]
 
