@@ -321,6 +321,21 @@ specify optparse:
          return luaproc (code, arglist)
       end
 
+  - context given a flag handler function:
+    - it records true by default:
+        expect (parseargs ([["x", parser.flag]], {"-x"})).
+           to_output "opts = { x = true }\n"
+    - it records a value that is not a function:
+        expect (parseargs ([["x", parser.flag, "stored"]], {"-x"})).
+           to_output "opts = { x = stored }\n"
+    - it records a false value:
+        expect (parseargs ([["x", parser.flag, false]], {"-x"})).
+           to_output "opts = { x = false }\n"
+    - it records the result of a function:
+        expect (parseargs ([["x", parser.flag, function (p, o, a)
+                                                 return "custom"
+                                               end]], {"-x"})).
+           to_output "opts = { x = custom }\n"
   - it recognises short options:
       expect (parseargs ([["x"]], {"-x"})).
          to_output "opts = { x = true }\n"

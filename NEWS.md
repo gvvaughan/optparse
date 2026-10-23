@@ -7,6 +7,10 @@
   - The `parse` method no longer raises an error for an argument list
     whose `__metatable` field is not a table, such as `true`.
 
+  - `parser.flag` now records a value that is not a function, such as
+    `parser:on('--stored', parser.flag, 'stored')`, as its documentation
+    says, instead of recording nothing.  Passing `false` records `false`.
+
 
 ## Noteworthy changes in release 2 (2026-10-20) [stable]
 

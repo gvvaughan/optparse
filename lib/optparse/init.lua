@@ -311,9 +311,12 @@ local function flag(self, arglist, i, value)
    local opt = arglist[i]
    if iscallable(value) then
       set(self, opt, value(self, opt, true))
-   elseif value == nil then
+   else
       local key = self[opt].key
-      self.opts[key] = true
+      if value == nil then
+         value = true
+      end
+      self.opts[key] = value
    end
 
    return i + 1
