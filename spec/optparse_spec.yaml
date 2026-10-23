@@ -265,6 +265,27 @@ specify optparse:
         local _, opts = parser:parse ({"--color=no"}, { color=true })
         expect (opts.color).to_be (false)
 
+    - it records a value given to a flag handler: |
+        local OptionParser = require "optparse"
+        local parser = OptionParser ("program 0\nUsage: program\n" ..
+                    "      --stored  store a value\n" ..
+                    "      --unset   store false\n")
+        parser:on ("stored", parser.flag, "value")
+        parser:on ("unset", parser.flag, false)
+        local _, opts = parser:parse {"--stored", "--unset"}
+        expect (opts.stored).to_be "value"
+        expect (opts.unset).to_be (false)
+
+    - it diagnoses a bad argument to a boolean handler: |
+        local OptionParser = require "optparse"
+        local parser = OptionParser ("program 0\nUsage: program\n" ..
+                    "      --color=WHEN  colorize\n")
+        parser:on ("color", parser.required, parser.boolean)
+        -- Raise the message, instead of exiting the process.
+        function parser:opterr (msg) error (msg, 0) end
+        expect (parser.parse (parser, {"--color=maybe"})).
+           to_raise "maybe: Not a valid argument to --color."
+
     - it parses an argument list with a protected metatable: |
         local OptionParser = require "optparse"
         local parser = OptionParser ("program 0\nUsage: program\n" ..
