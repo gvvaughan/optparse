@@ -50,52 +50,9 @@ local _ENV = require 'optparse._strict' {
 --[[ ================= ]]--
 
 
-local function iscallable(x)
-   if type(x) == 'function' then
-      return true
-   end
-   -- A protected metatable, from `__metatable`, need not be a table.
-   local mt = getmetatable(x)
-   return type(mt) == 'table' and type(mt.__call) == 'function'
-end
-
-
-local function getmetamethod(x, n)
-   local mt = getmetatable(x)
-   if type(mt) == 'table' then
-      local m = mt[tostring(n)]
-      if iscallable(m) then
-         return m
-      end
-   end
-end
-
-
-local function rawlen(x)
-   if type(x) ~= 'table' then
-      return #x
-   end
-
-   local n = #x
-   for i = 1, n do
-      if x[i] == nil then
-         return i - 1
-      end
-   end
-   return n
-end
-
-
-local function len(x)
-   local m = getmetamethod(x, '__len')
-   if m then
-      return m(x)
-   end
-   if getmetamethod(x, '__tostring') then
-      x = tostring(x)
-   end
-   return rawlen(x)
-end
+local normalize = require 'optparse._normalize'
+local iscallable = normalize.iscallable
+local len = normalize.len
 
 
 local function merge(t, r)
