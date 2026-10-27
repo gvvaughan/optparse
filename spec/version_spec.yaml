@@ -17,5 +17,5 @@ specify optparse.version:
 - describe version:
   - it describes this module:
       expect(M).to_match '^Parse Command%-Line Options'
-  - it ends with the release number:
-      expect(M).to_match.any_of {' dev$', ' %d[%.%d]*$'}
+  - it ends with the release number or the stamp of a development build:
+      expect(M).to_match.any_of {' %d[%.%d]*$', ' [%w_.-]+/%x+$'}
