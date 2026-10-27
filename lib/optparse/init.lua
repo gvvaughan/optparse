@@ -18,7 +18,7 @@
 ]]
 
 
-local _ENV = require 'optparse._strict' {
+local _ENV = require 'optparse._normalize'.strictness() {
    assert = assert,
    error = error,
    exit = os.exit,

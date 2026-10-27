@@ -4,6 +4,14 @@
 
 ### Bug fixes
 
+  - optparse applies strict variable declarations to its own module
+    whenever std.strict is installed, as std.normalize does, and no
+    longer only when std._debug is installed too.  Setting the `strict`
+    hint of std._debug to false still turns them off.
+
+  - The manual says to copy `init.lua` and `_normalize.lua`, the files that
+    optparse needs besides `version.lua`, where it named `_strict.lua`.
+
   - The `parse` method no longer raises an error for an argument list
     whose `__metatable` field is not a table, such as `true`.
 

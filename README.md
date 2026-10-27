@@ -42,7 +42,7 @@ luarocks install https://raw.githubusercontent.com/gvvaughan/optparse/master/opt
 ```
 
 The best way to install without [LuaRocks][] is to copy `init.lua` and
-`_strict.lua` from `lib/optparse` into an `optparse` directory in your
+`_normalize.lua` from `lib/optparse` into an `optparse` directory in your
 package search path.
 
 [luarocks]: https://luarocks.org "Lua package manager"
