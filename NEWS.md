@@ -2,6 +2,9 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+
+## Noteworthy changes in release 3 (2026-10-28) [stable]
+
 ### Incompatible changes
 
   - optparse is built from the `build` table of its rockspec, by the
