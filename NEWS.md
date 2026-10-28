@@ -10,6 +10,10 @@
     run, and no build without LuaRocks.  Building LDocs, which a release
     commits, no longer needs a build dependency of its own.
 
+  - The `help` alias of `parser.showhelp`, which has been undocumented
+    since release 1.5, is removed.  Use `parser.showhelp`, as in
+    `parser:on('-?', parser.showhelp)`.
+
 ### Bug fixes
 
   - optparse applies strict variable declarations to its own module

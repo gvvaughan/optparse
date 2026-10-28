@@ -782,7 +782,6 @@ return setmetatable({
          file     = file,
          finished = finished,
          flag     = flag,
-         help     = showhelp, -- undocumented, for backwards compatibility
          optional = optional,
          required = required,
          showhelp = showhelp,
