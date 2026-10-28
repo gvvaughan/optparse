@@ -29,7 +29,7 @@ Install the latest release with [LuaRocks]:
 {% endhighlight %}
 
 optparse is pure Lua, with no dependencies, so you can also copy
-`init.lua` and `_strict.lua` from its `lib/optparse` directory into an
+`init.lua` and `_normalize.lua` from its `lib/optparse` directory into an
 `optparse` directory in your package search path.
 
 

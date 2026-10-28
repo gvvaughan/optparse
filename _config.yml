@@ -4,7 +4,7 @@ account: gvvaughan
 name:         optparse
 description:  Parse and process command line options.
 forkme:       "https://github.com/gvvaughan/optparse"
-release-no:   2
+release-no:   3
 
 url:      "https://gvvaughan.github.io/optparse"
 markdown: kramdown
