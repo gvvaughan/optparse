@@ -4,8 +4,8 @@ Parse and Process Command Line Options
 Copyright (C) 2014-2018, 2021-2022, 2026 [Gary V. Vaughan][github]
 
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://mit-license.org)
-[![workflow status](https://github.com/gvvaughan/optparse/actions/workflows/spec.yml/badge.svg?branch=master)](https://github.com/gvvaughan/optparse/actions)
-[![codecov.io](https://codecov.io/gh/gvvaughan/optparse/graph/badge.svg?branch=master)](https://codecov.io/gh/gvvaughan/optparse?branch=master)
+[![workflow status](https://github.com/gvvaughan/optparse/actions/workflows/spec.yml/badge.svg?branch=release-v3)](https://github.com/gvvaughan/optparse/actions)
+[![codecov.io](https://codecov.io/gh/gvvaughan/optparse/graph/badge.svg?branch=release-v3)](https://codecov.io/gh/gvvaughan/optparse?branch=release-v3)
 
 In the common case, you can write the long-form help output typical of
 a modern command line program, and let this module generate a custom
