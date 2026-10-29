@@ -41,7 +41,6 @@ build = {
 }
 
 test_dependencies = {
-   'ansicolors',
    'luacov',
    'specl >= 17',
 }
