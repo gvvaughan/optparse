@@ -2,6 +2,24 @@
 
 ## Noteworthy changes in release ?.? (????-??-??) [?]
 
+### New features
+
+  - optparse checks the arguments of its functions, `optparse`, `on`,
+    `parse`, `opterr`, the option handlers, and `boolean` and `file`, when
+    typecheck is installed, and says which argument of which function was
+    wrong, with `bad argument #2 to 'optparse.on' (string or table
+    expected, got number)`.  Without typecheck there is no checking and
+    no overhead, and typecheck does none either when `std._debug` has
+    `argcheck = false` as it loads, as for the other libraries.
+
+### Incompatible changes
+
+  - With typecheck installed, `optparse(text:gsub(...))`, which also
+    passes the number of replacements, is an error: "no more than 2
+    arguments expected, got 3".  Put the call in parentheses, as in
+    `optparse((text:gsub(...)))`, or do not install typecheck in
+    production.
+
 
 ## Noteworthy changes in release 3 (2026-10-28) [stable]
 

@@ -17,6 +17,10 @@ package.path = std.package.normalize('./lib/?.lua', './lib/?/init.lua', package.
 local LUA = os.getenv 'LUA' or 'lua'
 
 
+-- Examples that check the arguments of the API need typecheck.
+have_typecheck = pcall(require, 'typecheck')
+
+
 -- Allow use of bare 'unpack' even in Lua > 5.2.
 unpack = table.unpack or unpack
 

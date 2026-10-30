@@ -55,6 +55,15 @@ local iscallable = normalize.iscallable
 local len = normalize.len
 
 
+-- Check the arguments of the API when typecheck is installed, and not
+-- when std._debug has `argcheck` false, which typecheck honors when it
+-- loads: otherwise the functions are what they are, with no overhead.
+local HAVE_TYPECHECK, typecheck = pcall(require, 'typecheck')
+local argscheck = HAVE_TYPECHECK and typecheck.argscheck or function(_, fn)
+   return fn
+end
+
+
 local function merge(t, r)
    r = r or {}
    for k, v in next, t do
@@ -212,6 +221,7 @@ function optional(self, arglist, i, value)
    set(self, arglist[i], value)
    return i + 1
 end
+optional = argscheck('optparse.optional(OptionParser, table, int, [?any])', optional)
 
 
 --- Option at `arglist[i]` requires an argument.
@@ -260,6 +270,7 @@ function required(self, arglist, i, value)
    set(self, opt, value)
    return i + 2
 end
+required = argscheck('optparse.required(OptionParser, table, int, [?any])', required)
 
 
 --- Finish option processing
@@ -284,6 +295,7 @@ local function finished(self, arglist, i)
    end
    return 1 + len(arglist)
 end
+finished = argscheck('optparse.finished(OptionParser, table, int, [?any])', finished)
 
 
 --- Option at `arglist[i]` is a boolean switch.
@@ -321,6 +333,7 @@ local function flag(self, arglist, i, value)
 
    return i + 1
 end
+flag = argscheck('optparse.flag(OptionParser, table, int, [?any])', flag)
 
 
 --- Option should display help text, then exit.
@@ -335,6 +348,7 @@ local function showhelp(self)
    print(self.helptext)
    exit(0)
 end
+showhelp = argscheck('optparse.showhelp(OptionParser, [?any...])', showhelp)
 
 
 --- Option should display version text, then exit.
@@ -349,6 +363,7 @@ local function showversion(self)
    print(self.versiontext)
    exit(0)
 end
+showversion = argscheck('optparse.showversion(OptionParser, [?any...])', showversion)
 
 
 
@@ -397,6 +412,7 @@ local function boolean(self, opt, optarg)
    end
    return b
 end
+boolean = argscheck('optparse.boolean(OptionParser, string, [?boolean|string])', boolean)
 
 
 --- Report an option parse error unless *optarg* names an
@@ -419,6 +435,7 @@ local function file(self, opt, optarg)
    h:close()
    return optarg
 end
+file = argscheck('optparse.file(OptionParser, string, string)', file)
 
 
 
@@ -443,6 +460,7 @@ local function opterr(self, msg)
    stderr:write(prog .. ": Try '" .. prog .. " --help' for help.\n")
    exit(2)
 end
+opterr = argscheck('optparse.opterr(OptionParser, string)', opterr)
 
 
 ------
@@ -513,6 +531,7 @@ local function on(self, opts, handler, value)
       end
    end
 end
+on = argscheck('optparse.on(OptionParser, string|table, [?callable], [?any])', on)
 
 
 ------
@@ -585,6 +604,7 @@ local function parse(self, arglist, defaults)
    -- back to _G.opts.
    return self.unrecognised, setmetatable(self.opts, {__index=self})
 end
+parse = argscheck('optparse.parse(OptionParser, table, [?table])', parse)
 
 
 --- Take care not to register duplicate handlers.
@@ -598,7 +618,9 @@ end
 
 
 local function _init(self, spec)
-   local parser = {}
+   -- Give it its type from the start, for the argument checks of the
+   -- functions that it is passed to below.
+   local parser = setmetatable({}, getmetatable(self))
 
    parser.versiontext, parser.version, parser.helptext, parser.program =
       match(spec, '^([^\n]-(%S+)\n.-)%s*([Uu]sage: (%S+).-)%s*$')
@@ -670,7 +692,7 @@ local function _init(self, spec)
       on(parser, options, handler or flag)
    end
 
-   return setmetatable(parser, getmetatable(self))
+   return parser
 end
 
 
@@ -774,7 +796,7 @@ return setmetatable({
    }, {
       _type = 'OptionParser',
 
-      __call = _init,
+      __call = argscheck('optparse(OptionParser, string)', _init),
 
       --- @export
       __index = {

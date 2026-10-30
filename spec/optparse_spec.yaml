@@ -50,7 +50,7 @@ specify optparse:
     ]]
 
     -- strip off the leading whitespace required for YAML
-    parser = OptionParser (help:gsub ("^    ", ""))
+    parser = OptionParser ((help:gsub ("^    ", "")))
 
 - context when required:
   - context by name:
@@ -69,6 +69,69 @@ specify optparse:
       lazy = M.version
       expect (lazy).to_be (require "optparse.version")
 
+
+- describe argument checking:
+  - before: |
+      -- A script that makes a parser, and runs *code* with it.
+      function withparser(prelude, code)
+         return prelude .. [[
+            package.path = "]] .. package.path .. [["
+            local optparse = require 'optparse'
+            local help = [=[]] .. help .. [[]=]
+            parser = optparse(help:match ("^[%s\n]*(.-)[%s\n]*$"))
+         ]] .. code
+      end
+
+  - context with typecheck installed:
+    - it diagnoses bad arguments to the functions of the parser: |
+        if have_typecheck then
+           expect (parser:on (1)).
+              to_raise "bad argument #2 to 'optparse.on' (string or table expected, got number)"
+           expect (parser:parse ("x")).
+              to_raise "bad argument #2 to 'optparse.parse' (table expected, got string)"
+           expect (parser:parse ({}, 1)).
+              to_raise "bad argument #3 to 'optparse.parse' (nil or table expected, got number)"
+           expect (parser:opterr (1)).
+              to_raise "bad argument #2 to 'optparse.opterr' (string expected, got number)"
+        end
+    - it diagnoses bad arguments to the handlers: |
+        if have_typecheck then
+           expect (parser.flag (parser, 1, 1)).
+              to_raise "bad argument #2 to 'optparse.flag' (table expected, got number)"
+           expect (parser.boolean (parser, 1)).
+              to_raise "bad argument #2 to 'optparse.boolean' (string expected, got number)"
+           expect (parser.file (parser, "-f", 1)).
+              to_raise "bad argument #3 to 'optparse.file' (string expected, got number)"
+        end
+    - it diagnoses a spec that is not a string: |
+        if have_typecheck then
+           expect (OptionParser (1)).
+              to_raise "bad argument #2 to 'optparse' (string expected, got number)"
+        end
+    - it diagnoses a parser that is not one: |
+        if have_typecheck then
+           expect (parser.parse ({}, {})).
+              to_raise "bad argument #1 to 'optparse.parse' (OptionParser expected, got empty table)"
+        end
+    - it does not check arguments when std._debug has argcheck false: |
+        if have_typecheck then
+           expect (luaproc (withparser ([[
+              package.preload["std._debug"] = function()
+                 return {argcheck = false, strict = true}
+              end
+           ]], [[
+              print (pcall (parser.parse, parser, "x"))
+           ]]))).not_to_contain_output "bad argument #2 to 'optparse.parse'"
+        end
+
+  - context without typecheck:
+    - it works, with no checking of arguments: |
+        expect (luaproc (withparser ([[
+           package.preload["typecheck"] = function() error ("not installed", 0) end
+        ]], [[
+           local _, opts = parser:parse {"-v"}
+           print (opts.verbose, (select (2, pcall (parser.parse, parser, "x"))):match "to 'optparse.parse'")
+        ]]))).to_output "true\tnil\n"
 
 - describe OptionParser:
   - it recognises the program name:
